@@ -1,0 +1,1954 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zimmer für Referendar:innen – Marktredwitz</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏡</text></svg>">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <meta name="description" content="Möblierte Zimmer in ruhiger Lage für Referendar:innen. Kupferhammerstraße 60, 95615 Marktredwitz. Befristete Mietverträge. Jetzt anfragen!">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:    #2c5f2e;
+      --green-lt: #4a8a4d;
+      --accent:   #97bc62;
+      --bg:       #f7f5f2;
+      --white:    #ffffff;
+      --text:     #2d2d2d;
+      --muted:    #6b7280;
+      --radius:   10px;
+      --shadow:   0 4px 20px rgba(0,0,0,.10);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ───────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(44, 95, 46, .95);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .75rem 2rem;
+    }
+
+    .nav-brand {
+      color: var(--white);
+      font-weight: 700;
+      font-size: 1.05rem;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,.85);
+      text-decoration: none;
+      font-size: .9rem;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    .nav-cta {
+      background: var(--accent);
+      color: var(--green) !important;
+      font-weight: 700 !important;
+      padding: .45rem 1.1rem;
+      border-radius: 50px;
+    }
+
+    .nav-cta:hover { background: #b5d67a !important; color: var(--green) !important; }
+
+    @media (max-width: 700px) {
+      .nav-links { display: none; }
+      .nav-cta-mobile {
+        display: inline-block;
+        background: var(--accent);
+        color: var(--green) !important;
+        font-weight: 700;
+        font-size: .85rem;
+        padding: .45rem 1.1rem;
+        border-radius: 50px;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+    }
+    @media (min-width: 701px) {
+      .nav-cta-mobile { display: none; }
+    }
+
+    /* ── HERO ──────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    #hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url('_images/Haus/001.jpg') center/cover no-repeat;
+      filter: brightness(.45);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      color: var(--white);
+      padding: 5rem 1.5rem 4rem;
+      max-width: 800px;
+    }
+
+    .hero-tags {
+      display: flex;
+      gap: .6rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background: rgba(255,255,255,.12);
+      color: rgba(255,255,255,.9);
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      padding: .35rem 1rem;
+      border-radius: 50px;
+      border: 1.5px solid rgba(255,255,255,.35);
+      pointer-events: none;
+    }
+
+    .hero-tag-accent {
+      background: var(--accent);
+      color: var(--green);
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+
+    .hero-content h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    .hero-content p {
+      font-size: 1.2rem;
+      opacity: .9;
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: .85rem 2rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: transform .15s, box-shadow .15s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.2); }
+
+    .btn-primary { background: var(--accent); color: var(--green); }
+    .btn-outline  { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,.7); }
+    .btn-outline:hover { border-color: var(--white); }
+    .btn-green   { background: var(--green); color: var(--white); }
+
+    .hero-facts {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(4px);
+      flex-wrap: wrap;
+    }
+
+    .hero-fact {
+      color: var(--white);
+      padding: 1rem 2rem;
+      text-align: center;
+      border-right: 1px solid rgba(255,255,255,.15);
+    }
+
+    .hero-fact:last-child { border-right: none; }
+
+    .hero-fact-value {
+      display: block;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .hero-fact-label {
+      font-size: .78rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      opacity: .8;
+    }
+
+    /* ── SECTIONS ──────────────────────────────────────────── */
+    section { padding: 5rem 1.5rem; }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    .section-label {
+      font-size: .8rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--green);
+      font-weight: 700;
+      margin-bottom: .5rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .section-subtitle {
+      color: var(--muted);
+      max-width: 620px;
+      margin-bottom: 3rem;
+    }
+
+    /* ── FEATURES ──────────────────────────────────────────── */
+    #features { background: var(--white); }
+
+    .features-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+
+    .feature-card {
+      flex: 0 1 240px;
+      background: var(--bg);
+      border-radius: var(--radius);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      border: 1px solid rgba(0,0,0,.06);
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+
+    .feature-icon {
+      font-size: 2.4rem;
+      margin-bottom: .75rem;
+      display: block;
+    }
+
+    .feature-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: .4rem; }
+    .feature-card p  { font-size: .9rem; color: var(--muted); }
+
+    /* ── ÜBER DAS HAUS ─────────────────────────────────────── */
+    #haus { background: var(--bg); }
+
+    .haus-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) { .haus-grid { grid-template-columns: 1fr; } }
+
+    .haus-img {
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      aspect-ratio: 4/3;
+    }
+
+    .haus-img img { width: 100%; height: 100%; object-fit: cover; }
+
+    .fact-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .6rem .5rem;
+      margin-top: 1.5rem;
+    }
+
+    .fact-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: .5rem;
+      font-size: .95rem;
+      color: var(--text);
+    }
+
+    .fact-list li::before {
+      content: '✓';
+      color: var(--green);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ── ZIMMER ────────────────────────────────────────────── */
+    #zimmer { background: var(--white); }
+
+    .zimmer-detail {
+      background: var(--bg);
+      border-radius: var(--radius);
+      border: 1px solid rgba(0,0,0,.07);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .zimmer-detail:last-of-type { margin-bottom: 0; }
+
+    .zimmer-detail-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .75rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(0,0,0,.07);
+    }
+
+    .zimmer-detail-header h3 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--green);
+      margin: 0;
+    }
+
+    .zimmer-detail-badges {
+      display: flex;
+      gap: .6rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .zimmer-spec-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .zimmer-spec {
+      background: var(--white);
+      border: 1.5px solid rgba(0,0,0,.08);
+      border-radius: 6px;
+      padding: .3rem .8rem;
+      font-size: .875rem;
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+    }
+
+    .zimmer-thumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .45rem;
+    }
+
+    .zimmer-thumb {
+      width: 180px;
+      height: 130px;
+      object-fit: cover;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+      display: block;
+    }
+
+    @media (max-width: 600px) {
+      .zimmer-thumb { width: calc(50% - .25rem); height: 120px; }
+    }
+
+    .zimmer-thumb:hover { transform: scale(1.06); box-shadow: 0 4px 12px rgba(0,0,0,.2); }
+
+    .badge-anfrage {
+      display: inline-block;
+      background: var(--green);
+      color: var(--white);
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      padding: .3rem .8rem;
+      border-radius: 50px;
+    }
+
+    .badge-befristet {
+      display: inline-block;
+      background: #e8f5e9;
+      color: var(--green);
+      font-size: .75rem;
+      font-weight: 600;
+      padding: .3rem .8rem;
+      border-radius: 50px;
+      border: 1px solid var(--accent);
+    }
+
+    /* ── GALERIE ───────────────────────────────────────────── */
+    #galerie { background: var(--bg); }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: .5rem;
+    }
+
+    .gallery-item {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .3s;
+      display: block;
+    }
+
+    .gallery-item:hover img { transform: scale(1.05); }
+
+    .gallery-item::after {
+      content: '⊕';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+      background: rgba(0,0,0,0);
+      transition: background .2s;
+    }
+
+    .gallery-item:hover::after { background: rgba(0,0,0,.35); }
+
+    /* ── GALERIE FILTER ───────────────────────────────────────────── */
+    .gallery-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-bottom: 2rem;
+    }
+
+    .gf-btn {
+      padding: .45rem 1.1rem;
+      border-radius: 50px;
+      border: 1.5px solid #ddd;
+      background: var(--white);
+      color: var(--muted);
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .gf-btn:hover { border-color: var(--green); color: var(--green); }
+    .gf-btn.active { background: var(--green); color: var(--white); border-color: var(--green); }
+
+    .gallery-section { margin-bottom: 2.5rem; }
+
+    .gallery-group-label {
+      grid-column: 1 / -1;
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--green);
+      padding: .3rem 0 .2rem;
+      border-bottom: 2px solid var(--accent);
+      margin-bottom: .25rem;
+    }
+
+    /* ── LIGHTBOX ──────────────────────────────────────────── */
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(0,0,0,.92);
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    #lightbox.active { display: flex; }
+
+    #lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+
+    #lb-close {
+      position: fixed;
+      top: 1rem; right: 1.25rem;
+      font-size: 2.5rem;
+      color: white;
+      cursor: pointer;
+      line-height: 1;
+      opacity: .7;
+      transition: opacity .15s;
+      background: none;
+      border: none;
+    }
+
+    #lb-close:hover { opacity: 1; }
+
+    #lb-prev, #lb-next {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2.5rem;
+      color: white;
+      cursor: pointer;
+      opacity: .7;
+      transition: opacity .15s;
+      background: none;
+      border: none;
+      padding: .5rem;
+    }
+
+    #lb-prev { left: 1rem; }
+    #lb-next { right: 1rem; }
+    #lb-prev:hover, #lb-next:hover { opacity: 1; }
+
+    #lb-counter {
+      position: fixed;
+      bottom: 1.25rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,.7);
+      font-size: .9rem;
+    }
+
+    /* ── VIDEO ─────────────────────────────────────────────── */
+    #video { background: var(--green); padding: 5rem 1.5rem; }
+
+    #video .section-label { color: var(--accent); }
+    #video .section-title { color: var(--white); }
+    #video .section-subtitle { color: rgba(255,255,255,.7); }
+
+    .video-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+      aspect-ratio: 16 / 9;
+      background: #000;
+      position: relative;
+    }
+
+    .video-wrapper video,
+    .video-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .yt-preview {
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .yt-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: filter .3s;
+    }
+
+    .yt-preview:hover img { filter: brightness(.75); }
+
+    .yt-play {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      height: 80px;
+      background: rgba(255,0,0,.92);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .2s, background .2s;
+      pointer-events: none;
+    }
+
+    .yt-preview:hover .yt-play {
+      background: #ff0000;
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    .yt-play::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 14px 0 14px 26px;
+      border-color: transparent transparent transparent #fff;
+      margin-left: 5px;
+    }
+
+    .yt-label {
+      position: absolute;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.6);
+      color: #fff;
+      font-size: .8rem;
+      padding: .3rem .8rem;
+      border-radius: 50px;
+      white-space: nowrap;
+      backdrop-filter: blur(4px);
+    }
+
+    /* ── GRUNDRISSE ────────────────────────────────────────── */
+    #grundrisse { background: var(--white); }
+
+    .grundriss-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    @media (max-width: 800px) { .grundriss-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 500px) { .grundriss-grid { grid-template-columns: 1fr; } }
+
+    .grundriss-card {
+      border: 1px solid rgba(0,0,0,.08);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    .grundriss-card img {
+      width: 100%;
+      display: block;
+      cursor: pointer;
+      transition: opacity .2s;
+    }
+
+    .grundriss-card img:hover { opacity: .9; }
+
+    .grundriss-label {
+      padding: .75rem 1rem;
+      font-weight: 700;
+      text-align: center;
+      color: var(--green);
+      font-size: .95rem;
+      background: var(--white);
+      border-top: 1px solid rgba(0,0,0,.06);
+    }
+
+    /* ── STANDORT / ILLUSTRATED MAP ───────────────────────── */
+    #standort { background: var(--bg); }
+
+    .illus-map-wrap {
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      margin-top: 2rem;
+      position: relative;
+    }
+
+    #illus-map {
+      width: 100%;
+      height: 500px;
+    }
+
+    @media (max-width: 600px) { #illus-map { height: 380px; } }
+
+    /* slightly warm up the tiles for an illustrated feel */
+    .illus-map-wrap .leaflet-tile-pane { filter: saturate(1.15) brightness(1.02); }
+
+    /* ── custom map markers ── */
+    .map-pin {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      filter: drop-shadow(0 2px 5px rgba(0,0,0,.28));
+      cursor: pointer;
+    }
+    .map-pin-emoji {
+      font-size: 1.45rem;
+      line-height: 1;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      border: 2.5px solid var(--green);
+      border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(0,0,0,.18);
+      transition: transform .15s;
+    }
+    .map-pin:hover .map-pin-emoji { transform: scale(1.15); }
+    .map-pin-label {
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .02em;
+      white-space: nowrap;
+      background: var(--green);
+      color: #fff;
+      padding: 2px 7px;
+      border-radius: 20px;
+      font-family: inherit;
+    }
+    /* infrastructure pins get an amber accent */
+    .map-pin--infra .map-pin-emoji { border-color: #b07d2e; }
+    .map-pin--infra .map-pin-label { background: #b07d2e; }
+    /* home pin – larger, pulsing, accent colour */
+    .map-pin--home .map-pin-emoji {
+      font-size: 1.65rem;
+      width: 46px;
+      height: 46px;
+      border-color: var(--accent);
+      border-width: 3px;
+      animation: map-pulse 2.4s ease-in-out infinite;
+    }
+    .map-pin--home .map-pin-label {
+      background: var(--accent);
+      color: #1a1a1a;
+      font-size: .68rem;
+    }
+    @keyframes map-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(151,188,98,.55), 0 2px 6px rgba(0,0,0,.18); }
+      55%       { box-shadow: 0 0 0 9px rgba(151,188,98,0), 0 2px 6px rgba(0,0,0,.18); }
+    }
+    /* Leaflet popup → site theme */
+    .leaflet-popup-content-wrapper {
+      border-radius: 10px !important;
+      box-shadow: 0 4px 16px rgba(0,0,0,.18) !important;
+      padding: 0 !important;
+      overflow: hidden;
+    }
+    .leaflet-popup-content {
+      margin: 0 !important;
+    }
+    .map-popup {
+      padding: .65rem .9rem;
+      font-family: inherit;
+      font-size: .875rem;
+    }
+    .map-popup strong { color: var(--green); font-size: .95rem; display: block; margin-bottom: .15rem; }
+    .map-popup small { color: var(--muted); }
+    .leaflet-popup-tip-container { display: none; }
+    /* map footer row */
+    .map-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-top: 1rem;
+      font-size: .8rem;
+      color: var(--muted);
+    }
+    .map-foot a { color: var(--accent); font-weight: 600; text-decoration: none; }
+    .map-foot a:hover { text-decoration: underline; }
+    .map-legend {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .map-legend-item {
+      display: flex;
+      align-items: center;
+      gap: .35rem;
+      font-size: .75rem;
+      font-weight: 600;
+    }
+    .map-legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── KONTAKT ───────────────────────────────────────────── */
+    #kontakt { background: var(--green); }
+
+    #kontakt .section-label { color: var(--accent); }
+    #kontakt .section-title { color: var(--white); }
+    #kontakt .section-subtitle { color: rgba(255,255,255,.75); max-width: 700px; margin-bottom: 2.5rem; }
+
+    .kontakt-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) { .kontakt-grid { grid-template-columns: 1fr; } }
+
+    .kontakt-info { color: var(--white); }
+
+    .kontakt-info h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      color: var(--accent);
+    }
+
+    .kontakt-info p { margin-bottom: .75rem; font-size: .95rem; opacity: .9; }
+
+    .tel-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      color: var(--white);
+      font-size: 1.4rem;
+      font-weight: 800;
+      text-decoration: none;
+      margin: .5rem 0 1.5rem;
+    }
+
+    .tel-link:hover { color: var(--accent); }
+
+    .hinweis-box {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      font-size: .9rem;
+      color: rgba(255,255,255,.85);
+      margin-top: 1.5rem;
+    }
+
+    .hinweis-box strong { color: var(--accent); display: block; margin-bottom: .3rem; }
+
+    /* ── FORM ──────────────────────────────────────────────── */
+    .anfrage-form {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,.15);
+    }
+
+    .anfrage-form h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--green);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+    }
+
+    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: .3rem;
+      margin-bottom: .75rem;
+    }
+
+    .form-group label {
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      border: 1.5px solid #ddd;
+      border-radius: 6px;
+      padding: .6rem .85rem;
+      font-size: .9rem;
+      font-family: inherit;
+      color: var(--text);
+      transition: border-color .2s;
+      background: #fafafa;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--green);
+      background: var(--white);
+    }
+
+    .form-group textarea { resize: vertical; min-height: 90px; }
+
+    .form-submit { width: 100%; padding: .9rem; font-size: 1rem; margin-top: .5rem; }
+
+    .form-hint {
+      font-size: .75rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: .75rem;
+    }
+
+    /* ── FOOTER ────────────────────────────────────────────── */
+    footer {
+      background: #1a3a1c;
+      color: rgba(255,255,255,.6);
+      text-align: center;
+      padding: 1.5rem 1rem;
+      font-size: .85rem;
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+
+    /* ── SCROLL HINT ──────────────────────────────────────── */
+    .scroll-hint {
+      position: absolute;
+      bottom: 82px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      color: rgba(255,255,255,.65);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .3rem;
+      font-size: .7rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      animation: scrollBounce 2.2s ease-in-out infinite;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .scroll-hint svg { width: 22px; height: 22px; }
+
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateX(-50%) translateY(0);   opacity: .65; }
+      50%       { transform: translateX(-50%) translateY(9px); opacity: 1;   }
+    }
+
+    /* ── UMGEBUNG ─────────────────────────────────────────── */
+    #umgebung { background: var(--white); }
+
+    .umgebung-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      margin-bottom: 3rem;
+    }
+
+    @media (max-width: 768px) { .umgebung-cols { grid-template-columns: 1fr; } }
+
+    .umgebung-col h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--green);
+    }
+
+    .dist-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .88rem;
+    }
+
+    .dist-table th {
+      text-align: left;
+      font-weight: 700;
+      font-size: .75rem;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: .4rem .5rem .5rem 0;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .dist-table td {
+      padding: .55rem .5rem .55rem 0;
+      border-bottom: 1px solid rgba(0,0,0,.05);
+      vertical-align: middle;
+    }
+
+    .dist-table td:first-child { font-weight: 600; color: var(--text); }
+    .dist-table td:not(:first-child) { color: var(--muted); white-space: nowrap; }
+    .dist-table tr:last-child td { border-bottom: none; }
+    .dist-table a { color: var(--green); text-decoration: none; }
+    .dist-table a:hover { text-decoration: underline; }
+
+    .stadtlinks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    .stadtlink-card {
+      background: var(--bg);
+      border: 1px solid rgba(0,0,0,.07);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      align-items: flex-start;
+      gap: .75rem;
+      transition: transform .15s, box-shadow .15s;
+    }
+
+    .stadtlink-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); color: var(--green); }
+
+    .stadtlink-icon { font-size: 1.5rem; flex-shrink: 0; line-height: 1.2; }
+    .stadtlink-card strong { display: block; font-size: .9rem; font-weight: 700; margin-bottom: .15rem; }
+    .stadtlink-card span { font-size: .8rem; color: var(--muted); }
+
+    /* ── SCROLL REVEAL ─────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .45s ease, transform .45s ease;
+      will-change: opacity, transform;
+    }
+
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ─────────────────────────────────────────────────────── -->
+<nav>
+  <a href="#hero" class="nav-brand">🏡 Marktredwitz – Zimmer für Referendar:innen</a>
+  <a href="#kontakt" class="nav-cta-mobile">Anfragen</a>
+  <ul class="nav-links">
+    <li><a href="#haus">Das Haus</a></li>
+    <li><a href="#zimmer">Zimmer</a></li>
+    <li><a href="#galerie">Galerie</a></li>
+    <li><a href="#grundrisse">Grundrisse</a></li>
+    <li><a href="#umgebung">Umgebung</a></li>
+    <li><a href="#standort">Lage</a></li>
+    <li><a href="#kontakt" class="nav-cta">Jetzt anfragen</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─────────────────────────────────────────────────────── -->
+<section id="hero">
+  <div id="hero-bg"></div>
+  <div class="hero-content reveal">
+    <div class="hero-tags">
+      <span class="hero-tag hero-tag-accent">Verfügbar ab sofort</span>
+      <span class="hero-tag">Befristete Mietverträge</span>
+    </div>
+    <h1>Ihr Zuhause auf Zeit in Marktredwitz</h1>
+    <p>Möblierte Zimmer in einem gepflegten Einfamilienhaus – ideal für Referendar:innen. Gemeinschaftliche Küche, großer Garten und zwei Bäder inklusive.</p>
+    <div class="hero-btns">
+      <a href="#kontakt" class="btn btn-primary">Jetzt Zimmer anfragen</a>
+      <a href="#galerie" class="btn btn-outline">Fotos ansehen</a>
+    </div>
+  </div>
+  <a href="#features" class="scroll-hint" aria-label="Nach unten scrollen">
+    <svg viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="6 9 12 15 18 9"/></svg>
+    <span>Entdecken</span>
+  </a>
+  <div class="hero-facts">
+    <div class="hero-fact">
+      <span class="hero-fact-value">4</span>
+      <span class="hero-fact-label">Zimmer verfügbar</span>
+    </div>
+    <div class="hero-fact">
+      <span class="hero-fact-value">2</span>
+      <span class="hero-fact-label">Bäder</span>
+    </div>
+    <div class="hero-fact">
+      <span class="hero-fact-value">112 m²</span>
+      <span class="hero-fact-label">Wohnfläche</span>
+    </div>
+    <div class="hero-fact">
+      <span class="hero-fact-value">806 m²</span>
+      <span class="hero-fact-label">Grundstück</span>
+    </div>
+    <div class="hero-fact">
+      <span class="hero-fact-value">befristet</span>
+      <span class="hero-fact-label">Mietvertrag</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FEATURES ─────────────────────────────────────────────────── -->
+<section id="features">
+  <div class="container">
+    <div class="features-grid reveal">
+      <div class="feature-card">
+        <span class="feature-icon">🛏️</span>
+        <h3>Möblierte Einzelzimmer</h3>
+        <p>4 separate Zimmer – jedes individuell und vollständig möbliert, zum Einziehen und Wohlfühlen.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🍳</span>
+        <h3>Voll eingerichtete Küche</h3>
+        <p>Gemeinschaftliche Küche mit allen Geräten – gemeinsames Kochen inklusive.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🛁</span>
+        <h3>Zwei Bäder</h3>
+        <p>Zwei vollwertige Bäder mit Badewanne, Dusche und Gäste-WC. Kein Stress am Morgen.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🌳</span>
+        <h3>Großer Garten</h3>
+        <p>Gepflegter Garten mit schönem Baum- und Strauchbestand – ideal zum Abschalten nach dem Arbeitstag.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🚗</span>
+        <h3>Stellplatz & Garage</h3>
+        <p>Zwei Garagen mit elektrischem Torantrieb sowie ausreichend Stellplätze auf dem Grundstück.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📋</span>
+        <h3>Befristeter Mietvertrag</h3>
+        <p>Alle Verträge werden befristet abgeschlossen – perfekt für die Dauer des Referendariats.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🧺</span>
+        <h3>Waschmaschine &amp; Trockner</h3>
+        <p>Waschmaschine und Trockner stehen allen Mieter:innen gemeinschaftlich zur Verfügung.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ÜBER DAS HAUS ────────────────────────────────────────────── -->
+<section id="haus">
+  <div class="container">
+    <div class="haus-grid">
+      <div class="reveal">
+        <div class="section-label">Das Objekt</div>
+        <h2 class="section-title">Solides Massivhaus in ruhiger Lage</h2>
+        <p>Dieses charmante Einfamilienhaus in Marktredwitz bietet Ihnen Wohnfläche von ca. 112 m² auf einem großzügigen Grundstück von 806 m². Das 1936 erbaute Massivhaus ist gepflegt, sofort bezugsfrei und speziell für Referendar:innen ausgerichtet.</p>
+        <p style="margin-top:.75rem; color:var(--muted);">Im Erdgeschoss befinden sich das Wohnzimmer, die Küche sowie zwei Zimmer und ein Bad. Im Dachgeschoss sind zwei weitere Zimmer und das zweite Bad untergebracht.</p>
+        <ul class="fact-list">
+          <li>Wohnfläche ca. 112 m²</li>
+          <li>Grundstück 806 m²</li>
+          <li>Baujahr ca. 1936</li>
+          <li>Massivbau, gepflegt</li>
+          <li>Gas-Zentralheizung</li>
+          <li>Kunststoff-Isolierglasfenster</li>
+          <li>Keller vorhanden</li>
+          <li>Terrasse &amp; Freisitz</li>
+          <li>Tageslichtbad</li>
+          <li>2 Garagen</li>
+        </ul>
+      </div>
+      <div class="haus-img reveal">
+        <img src="_images/Haus/001.jpg" alt="Außenansicht des Hauses in Marktredwitz" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ZIMMER ───────────────────────────────────────────────────── -->
+<section id="zimmer">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Mietangebot</div>
+      <h2 class="section-title">4 Zimmer – Miete auf Anfrage</h2>
+      <p class="section-subtitle">Jedes Zimmer kann einzeln gemietet werden. Alle Verträge sind befristet – ideal abgestimmt auf die Dauer eines Referendariats. Gemeinschaftsräume (Küche, Wohnzimmer, Garten) werden gemeinsam genutzt. <strong>Alle Zimmer sind abschließbar.</strong></p>
+    </div>
+
+    <!-- Zimmer 1 -->
+    <div class="zimmer-detail reveal">
+      <div class="zimmer-detail-header">
+        <h3>Zimmer 1 · Erdgeschoss</h3>
+        <div class="zimmer-detail-badges">
+          <span class="badge-anfrage">Miete auf Anfrage</span>
+          <span class="badge-befristet">Befristet</span>
+        </div>
+      </div>
+      <div class="zimmer-spec-row">
+        <span class="zimmer-spec">📐 Größe: TBA</span>
+        <span class="zimmer-spec">🔑 Abschließbar</span>
+        <span class="zimmer-spec">🏠 Erdgeschoss</span>
+      </div>
+      <p style="color:var(--muted); font-size:.9rem; margin-bottom:1.25rem;">Helles Zimmer im Erdgeschoss, vollständig möbliert, mit direktem Zugang zu Küche und Wohnzimmer.</p>
+      <div class="zimmer-thumbs">
+        <img src="_images/EG/Schlafzimmer/001.JPG" alt="Zimmer 1" class="zimmer-thumb" onclick="openLightboxSrc(this)" loading="lazy">
+        <img src="_images/EG/Schlafzimmer/002.JPG" alt="Zimmer 1" class="zimmer-thumb" onclick="openLightboxSrc(this)" loading="lazy">
+      </div>
+    </div>
+
+    <!-- Zimmer 2 -->
+    <div class="zimmer-detail reveal">
+      <div class="zimmer-detail-header">
+        <h3>Zimmer 2 · Erdgeschoss</h3>
+        <div class="zimmer-detail-badges">
+          <span class="badge-anfrage">Miete auf Anfrage</span>
+          <span class="badge-befristet">Befristet</span>
+        </div>
+      </div>
+      <div class="zimmer-spec-row">
+        <span class="zimmer-spec">📐 10,54 m²</span>
+        <span class="zimmer-spec">🔑 Abschließbar</span>
+        <span class="zimmer-spec">🏠 Erdgeschoss</span>
+      </div>
+      <p style="color:var(--muted); font-size:.9rem; margin-bottom:1.25rem;">Ruhiges, kompaktes Zimmer mit Blick in den Garten, vollständig möbliert.</p>
+      <div class="zimmer-thumbs">
+        <img src="_images/EG/KleinesZimmer/001.JPG" alt="Zimmer 2" class="zimmer-thumb" onclick="openLightboxSrc(this)" loading="lazy">
+      </div>
+    </div>
+
+    <!-- Zimmer 3 -->
+    <div class="zimmer-detail reveal">
+      <div class="zimmer-detail-header">
+        <h3>Zimmer 3 · Dachgeschoss</h3>
+        <div class="zimmer-detail-badges">
+          <span class="badge-anfrage">Miete auf Anfrage</span>
+          <span class="badge-befristet">Befristet</span>
+        </div>
+      </div>
+      <div class="zimmer-spec-row">
+        <span class="zimmer-spec">📐 Größe: TBA</span>
+        <span class="zimmer-spec">🛏️ Bett</span>
+        <span class="zimmer-spec">🪑 Schreibtisch</span>
+        <span class="zimmer-spec">🗄️ Kleiderschrank</span>
+        <span class="zimmer-spec">🛋️ Kleines Sofa</span>
+        <span class="zimmer-spec">🔑 Abschließbar</span>
+        <span class="zimmer-spec">🏠 Dachgeschoss</span>
+      </div>
+      <p style="color:var(--muted); font-size:.9rem; margin-bottom:1.25rem;">Gemütliches Dachgeschoss-Zimmer mit Schreibtisch, Bett, Kleiderschrank und kleinem Sofa – ruhig und behaglich.</p>
+      <div class="zimmer-thumbs">
+        <img src="_images/1OG/Zimmer/001.JPG" alt="Zimmer 3" class="zimmer-thumb" onclick="openLightboxSrc(this)" loading="lazy">
+        <img src="_images/1OG/Zimmer/002.JPG" alt="Zimmer 3" class="zimmer-thumb" onclick="openLightboxSrc(this)" loading="lazy">
+        <img src="_images/1OG/Zimmer/003.JPG" alt="Zimmer 3" class="zimmer-thumb" onclick="openLightboxSrc(this)" loading="lazy">
+      </div>
+    </div>
+
+    <!-- Zimmer 4 -->
+    <div class="zimmer-detail reveal">
+      <div class="zimmer-detail-header">
+        <h3>Zimmer 4 · Dachgeschoss</h3>
+        <div class="zimmer-detail-badges">
+          <span class="badge-anfrage">Miete auf Anfrage</span>
+          <span class="badge-befristet">Befristet</span>
+        </div>
+      </div>
+      <div class="zimmer-spec-row">
+        <span class="zimmer-spec">📐 Größe: TBA</span>
+        <span class="zimmer-spec">🛏️ Bett</span>
+        <span class="zimmer-spec">🪑 Höhenverstellbarer Schreibtisch</span>
+        <span class="zimmer-spec">🗄️ Kleiderschrank</span>
+        <span class="zimmer-spec">🛋️ Kleines Sofa</span>
+        <span class="zimmer-spec">👗 Ankleidezimmer</span>
+        <span class="zimmer-spec">🔑 Abschließbar</span>
+        <span class="zimmer-spec">🏠 Dachgeschoss</span>
+      </div>
+      <p style="color:var(--muted); font-size:.9rem; margin-bottom:1.25rem;">Geräumiges Dachzimmer mit eigenem Ankleidezimmer, höhenverstellbarem Schreibtisch, Bett, Kleiderschrank und kleinem Sofa. Möbliert und sofort bezugsfertig.</p>
+      <div class="zimmer-thumbs">
+        <img src="_images/1OG/Zimmer2/001.JPG" alt="Zimmer 4" class="zimmer-thumb" onclick="openLightboxSrc(this)" loading="lazy">
+        <img src="_images/1OG/Zimmer2/002.JPG" alt="Zimmer 4" class="zimmer-thumb" onclick="openLightboxSrc(this)" loading="lazy">
+        <img src="_images/1OG/Zimmer2/003.JPG" alt="Zimmer 4" class="zimmer-thumb" onclick="openLightboxSrc(this)" loading="lazy">
+        <img src="_images/1OG/Zimmer2/004.JPG" alt="Zimmer 4" class="zimmer-thumb" onclick="openLightboxSrc(this)" loading="lazy">
+        <img src="_images/1OG/Zimmer2/005.JPG" alt="Zimmer 4" class="zimmer-thumb" onclick="openLightboxSrc(this)" loading="lazy">
+        <img src="_images/1OG/Zimmer2/006.JPG" alt="Zimmer 4" class="zimmer-thumb" onclick="openLightboxSrc(this)" loading="lazy">
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:2.5rem;" class="reveal">
+      <a href="#kontakt" class="btn btn-green">Jetzt Zimmer anfragen →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── GALERIE ───────────────────────────────────────────────────── -->
+<section id="galerie">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Impressionen</div>
+      <h2 class="section-title">Bildergalerie</h2>
+      <p class="section-subtitle">Nach Bereich filtern oder alle Fotos ansehen. Klick auf ein Bild öffnet die Vollansicht.</p>
+    </div>
+    <div class="gallery-filters reveal">
+      <button class="gf-btn active" data-filter="all">Alle</button>
+      <button class="gf-btn" data-filter="aussen">Außen</button>
+      <button class="gf-btn" data-filter="eg">Erdgeschoss</button>
+      <button class="gf-btn" data-filter="og">1. Obergeschoss</button>
+      <button class="gf-btn" data-filter="keller">Keller &amp; Treppe</button>
+      <button class="gf-btn" data-filter="garten">Garten</button>
+    </div>
+
+    <!-- AUSSENANSICHT -->
+    <div class="gallery-section" data-cat="aussen">
+      <div class="gallery-grid">
+        <div class="gallery-group-label">Außenansicht</div>
+        <div class="gallery-item"><img src="_images/Haus/001.jpg" alt="Außenansicht" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/Haus/002.jpg" alt="Außenansicht" loading="lazy"></div>
+      </div>
+    </div>
+
+    <!-- ERDGESCHOSS -->
+    <div class="gallery-section" data-cat="eg">
+      <div class="gallery-grid">
+        <div class="gallery-group-label">Wohnzimmer</div>
+        <div class="gallery-item"><img src="_images/EG/Wohnzimmer/001.JPG" alt="Wohnzimmer" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/EG/Wohnzimmer/002.JPG" alt="Wohnzimmer" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/EG/Wohnzimmer/003.JPG" alt="Wohnzimmer" loading="lazy"></div>
+        <div class="gallery-group-label">Küche</div>
+        <div class="gallery-item"><img src="_images/EG/Küche/001.JPG" alt="Küche" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/EG/Küche/002.JPG" alt="Küche" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/EG/Küche/003.jpg" alt="Küche" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/EG/Küche/004.jpg" alt="Küche" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/EG/Küche/005.jpg" alt="Küche" loading="lazy"></div>
+        <div class="gallery-group-label">Schlafzimmer (Zimmer 1 – EG)</div>
+        <div class="gallery-item"><img src="_images/EG/Schlafzimmer/001.JPG" alt="Schlafzimmer" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/EG/Schlafzimmer/002.JPG" alt="Schlafzimmer" loading="lazy"></div>
+        <div class="gallery-group-label">Kleines Zimmer (Zimmer 2 – EG)</div>
+        <div class="gallery-item"><img src="_images/EG/KleinesZimmer/001.JPG" alt="Kleines Zimmer" loading="lazy"></div>
+        <div class="gallery-group-label">Bad (EG)</div>
+        <div class="gallery-item"><img src="_images/EG/Bad/001.JPG" alt="Bad EG" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/EG/Bad/002.JPG" alt="Bad EG" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/EG/Bad/003.JPG" alt="Bad EG" loading="lazy"></div>
+        <div class="gallery-group-label">WC (EG)</div>
+        <div class="gallery-item"><img src="_images/EG/WC/001.JPG" alt="WC" loading="lazy"></div>
+        <div class="gallery-group-label">Flur (EG)</div>
+        <div class="gallery-item"><img src="_images/EG/Flur/001.jpg" alt="Flur EG" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/EG/Flur/002.jpg" alt="Flur EG" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/EG/Flur/003.jpg" alt="Flur EG" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/EG/Flur/004.JPG" alt="Flur EG" loading="lazy"></div>
+      </div>
+    </div>
+
+    <!-- 1. OBERGESCHOSS -->
+    <div class="gallery-section" data-cat="og">
+      <div class="gallery-grid">
+        <div class="gallery-group-label">Zimmer 3 (1. OG)</div>
+        <div class="gallery-item"><img src="_images/1OG/Zimmer/001.JPG" alt="Zimmer 3" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/1OG/Zimmer/002.JPG" alt="Zimmer 3" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/1OG/Zimmer/003.JPG" alt="Zimmer 3" loading="lazy"></div>
+        <div class="gallery-group-label">Zimmer 4 (1. OG)</div>
+        <div class="gallery-item"><img src="_images/1OG/Zimmer2/001.JPG" alt="Zimmer 4" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/1OG/Zimmer2/002.JPG" alt="Zimmer 4" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/1OG/Zimmer2/003.JPG" alt="Zimmer 4" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/1OG/Zimmer2/004.JPG" alt="Zimmer 4" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/1OG/Zimmer2/005.JPG" alt="Zimmer 4" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/1OG/Zimmer2/006.JPG" alt="Zimmer 4" loading="lazy"></div>
+        <div class="gallery-group-label">Bad (1. OG)</div>
+        <div class="gallery-item"><img src="_images/1OG/Bad/001.JPG" alt="Bad OG" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/1OG/Bad/002.JPG" alt="Bad OG" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/1OG/Bad/003.JPG" alt="Bad OG" loading="lazy"></div>
+        <div class="gallery-group-label">Flur (1. OG)</div>
+        <div class="gallery-item"><img src="_images/1OG/Flur/001.JPG" alt="Flur OG" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/1OG/Flur/002.JPG" alt="Flur OG" loading="lazy"></div>
+      </div>
+    </div>
+
+    <!-- KELLER & TREPPE -->
+    <div class="gallery-section" data-cat="keller">
+      <div class="gallery-grid">
+        <div class="gallery-group-label">Treppe</div>
+        <div class="gallery-item"><img src="_images/Treppe/001.JPG" alt="Treppe" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/Treppe/002.jpg" alt="Treppe" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/Treppe/003.JPG" alt="Treppe" loading="lazy"></div>
+        <div class="gallery-group-label">Keller</div>
+        <div class="gallery-item"><img src="_images/Keller/001.JPG" alt="Keller" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/Keller/002.JPG" alt="Keller" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/Keller/003.JPG" alt="Keller" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/Keller/004.JPG" alt="Keller" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/Keller/005.JPG" alt="Keller" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/Keller/006.JPG" alt="Keller" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/Keller/007.JPG" alt="Keller" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/Keller/008.JPG" alt="Keller" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/Keller/009.JPG" alt="Keller" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/Keller/010.JPG" alt="Keller" loading="lazy"></div>
+      </div>
+    </div>
+
+    <!-- GARTEN -->
+    <div class="gallery-section" data-cat="garten">
+      <div class="gallery-grid">
+        <div class="gallery-group-label">Garten</div>
+        <div class="gallery-item"><img src="_images/Garten/001.jpg" alt="Garten" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/Garten/002.jpg" alt="Garten" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/Garten/003.jpg" alt="Garten" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/Garten/004.jpg" alt="Garten" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/Garten/005.jpg" alt="Garten" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/Garten/006.jpg" alt="Garten" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/Garten/007.jpg" alt="Garten" loading="lazy"></div>
+        <div class="gallery-item"><img src="_images/Garten/008.jpg" alt="Garten" loading="lazy"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── VIDEO ────────────────────────────────────────────────────── -->
+<section id="video">
+  <div class="container" style="text-align:center;">
+    <div class="reveal">
+      <div class="section-label">Rundgang</div>
+      <h2 class="section-title">Video-Rundgang durchs Haus</h2>
+      <p class="section-subtitle" style="margin:0 auto 2rem;">Verschaffen Sie sich einen ersten Eindruck von Ihrem neuen Zuhause auf Zeit.</p>
+    </div>
+    <div class="video-wrapper reveal">
+      <div class="yt-preview" id="yt-facade" onclick="loadYT()" role="button" aria-label="Video abspielen">
+        <img src="https://img.youtube.com/vi/KFESGuiNSlo/maxresdefault.jpg" alt="Video-Vorschau: Rundgang durch das Haus" loading="lazy">
+        <div class="yt-play"></div>
+        <span class="yt-label">▶️ Video-Rundgang abspielen</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── GRUNDRISSE ───────────────────────────────────────────────── -->
+<section id="grundrisse">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Aufteilung</div>
+      <h2 class="section-title">Grundrisse</h2>
+      <p class="section-subtitle">Das Haus verteilt sich auf Erdgeschoss, Obergeschoss und Keller. Klicken Sie auf einen Grundriss, um ihn zu vergrößern.</p>
+    </div>
+    <div class="grundriss-grid">
+      <div class="grundriss-card reveal">
+        <img src="_images/sparkasse/EG.jpg" alt="Grundriss Erdgeschoss" onclick="openLightboxSrc('_images/sparkasse/EG.jpg')">
+        <div class="grundriss-label">Erdgeschoss (EG)</div>
+      </div>
+      <div class="grundriss-card reveal">
+        <img src="_images/sparkasse/DG.jpg" alt="Grundriss Obergeschoss" onclick="openLightboxSrc('_images/sparkasse/DG.jpg')">
+        <div class="grundriss-label">Obergeschoss (OG)</div>
+      </div>
+      <div class="grundriss-card reveal">
+        <img src="_images/sparkasse/KG.jpg" alt="Grudgndriss Keller" onclick="openLightboxSrc('_images/sparkasse/KG.jpg')">
+        <div class="grundriss-label">Kellergeschoss</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── STANDORT ─────────────────────────────────────────────────── -->
+<section id="standort">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Lage</div>
+      <h2 class="section-title">Alles auf einen Blick</h2>
+      <p class="section-subtitle">Kupferhammerstraße 60 liegt zentral – Schulen, Bahnhof und Einkauf sind alle bequem per Rad erreichbar. Klicke auf einen Marker für Details.</p>
+    </div>
+    <div class="illus-map-wrap reveal">
+      <div id="illus-map"></div>
+    </div>
+    <div class="map-foot">
+      <div class="map-legend">
+        <span class="map-legend-item"><span class="map-legend-dot" style="background:var(--accent); border:2px solid var(--accent);"></span>Unterkunft</span>
+        <span class="map-legend-item"><span class="map-legend-dot" style="background:var(--green);"></span>Schulen</span>
+        <span class="map-legend-item"><span class="map-legend-dot" style="background:#b07d2e;"></span>Infrastruktur</span>
+      </div>
+      <a href="https://maps.google.com/?q=Kupferhammerstra%C3%9Fe+60,+95615+Marktredwitz" target="_blank" rel="noopener">In Google Maps öffnen →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── UMGEBUNG ──────────────────────────────────────────────── -->
+<section id="umgebung">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Umgebung</div>
+      <h2 class="section-title">Lage &amp; Infrastruktur</h2>
+      <p class="section-subtitle">Alle wichtigen Einrichtungen sind gut erreichbar – zu Fuß, mit dem Fahrrad oder mit dem Auto. Alle Angaben sind ca.-Werte.</p>
+    </div>
+    <div class="umgebung-cols">
+      <div class="umgebung-col reveal">
+        <h3>🏫 Schulen in der Nähe</h3>
+        <table class="dist-table">
+          <thead>
+            <tr>
+              <th>Schule</th>
+              <th>🚲 Rad</th>
+              <th>🚗 Auto</th>
+              <th>🚶 Fuß</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="https://www.ohg-marktredwitz.de" target="_blank" rel="noopener">Otto-Hahn-Gymnasium</a><br><small style="color:var(--muted); font-weight:400;">Schulstraße 10</small></td>
+              <td>ca. 8 min</td>
+              <td>ca. 4 min</td>
+              <td>ca. 24 min</td>
+            </tr>
+            <tr>
+              <td>Luitpold-Realschule Marktredwitz</td>
+              <td>ca. 9 min</td>
+              <td>ca. 5 min</td>
+              <td>ca. 27 min</td>
+            </tr>
+            <tr>
+              <td><a href="https://mittelschule.marktredwitz.de" target="_blank" rel="noopener">Alexander-v.-Humboldt Mittelschule</a><br><small style="color:var(--muted); font-weight:400;">Schulstraße 1</small></td>
+              <td>ca. 7 min</td>
+              <td>ca. 4 min</td>
+              <td>ca. 22 min</td>
+            </tr>
+            <tr>
+              <td>Grundschule Marktredwitz<br><small style="color:var(--muted); font-weight:400;">Bauerstraße 4</small></td>
+              <td>ca. 8 min</td>
+              <td>ca. 4 min</td>
+              <td>ca. 23 min</td>
+            </tr>
+            <tr>
+              <td><a href="https://www.fosbos-mak.de" target="_blank" rel="noopener">FOS/BOS Marktredwitz</a><br><small style="color:var(--muted); font-weight:400;">Schulstraße 12</small></td>
+              <td>ca. 8 min</td>
+              <td>ca. 4 min</td>
+              <td>ca. 24 min</td>
+            </tr>
+            <tr>
+              <td>Berufsschule Marktredwitz<br><small style="color:var(--muted); font-weight:400;">Schulstraße 12</small></td>
+              <td>ca. 8 min</td>
+              <td>ca. 4 min</td>
+              <td>ca. 24 min</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="font-size:.75rem; color:var(--muted); margin-top:.75rem;">ca.-Werte – <a href="https://maps.google.com/?q=Kupferhammerstra%C3%9Fe+60,+95615+Marktredwitz" target="_blank" rel="noopener">Aktuelle Route in Google Maps →</a></p>
+      </div>
+      <div class="umgebung-col reveal">
+        <h3>🛒 Infrastruktur &amp; Nahversorgung</h3>
+        <table class="dist-table">
+          <thead>
+            <tr>
+              <th>Ort / Einrichtung</th>
+              <th>🚲 Rad</th>
+              <th>🚗 Auto</th>
+              <th>🚶 Fuß</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Innenstadt / Marktplatz</td>
+              <td>ca. 7 min</td>
+              <td>ca. 4 min</td>
+              <td>ca. 21 min</td>
+            </tr>
+            <tr>
+              <td>Supermarkt (Lidl, Edeka)</td>
+              <td>ca. 8 min</td>
+              <td>ca. 4 min</td>
+              <td>ca. 23 min</td>
+            </tr>
+            <tr>
+              <td>Bahnhof Marktredwitz</td>
+              <td>ca. 8 min</td>
+              <td>ca. 4 min</td>
+              <td>ca. 23 min</td>
+            </tr>
+            <tr>
+              <td><a href="https://www.klinikum-fichtelgebirge.de" target="_blank" rel="noopener">Klinikum Fichtelgebirge</a></td>
+              <td>ca. 12 min</td>
+              <td>ca. 7 min</td>
+              <td>ca. 36 min</td>
+            </tr>
+            <tr>
+              <td>Fitnesstudio</td>
+              <td>ca. 8 min</td>
+              <td>ca. 4 min</td>
+              <td>ca. 23 min</td>
+            </tr>
+            <tr>
+              <td>Autobahn A93 (Anschluss)</td>
+              <td>–</td>
+              <td>ca. 10 min</td>
+              <td>–</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="font-size:.75rem; color:var(--muted); margin-top:.75rem;">Alle Angaben ca.-Werte ohne Gewähr.</p>
+      </div>
+    </div>
+    <div class="reveal">
+      <h3 style="font-size:1.05rem; font-weight:700; color:var(--green); margin-bottom:1.25rem;">🔗 Nützliche Links für den Start in Marktredwitz</h3>
+      <div class="stadtlinks-grid">
+        <a href="https://www.marktredwitz.de" target="_blank" rel="noopener" class="stadtlink-card">
+          <span class="stadtlink-icon">🏙️</span>
+          <div><strong>Stadt Marktredwitz</strong><span>Offizielle Website der Stadt</span></div>
+        </a>
+        <a href="https://www.ohg-marktredwitz.de" target="_blank" rel="noopener" class="stadtlink-card">
+          <span class="stadtlink-icon">🎓</span>
+          <div><strong>Otto-Hahn-Gymnasium</strong><span>Gymnasium Marktredwitz</span></div>
+        </a>
+        <a href="https://www.fosbos-mak.de" target="_blank" rel="noopener" class="stadtlink-card">
+          <span class="stadtlink-icon">📚</span>
+          <div><strong>FOS/BOS Marktredwitz</strong><span>Fach- und Berufsoberschule</span></div>
+        </a>
+        <a href="https://mittelschule.marktredwitz.de" target="_blank" rel="noopener" class="stadtlink-card">
+          <span class="stadtlink-icon">🏫</span>
+          <div><strong>Mittelschule Marktredwitz</strong><span>Alexander-von-Humboldt-Schule</span></div>
+        </a>
+        <a href="https://www.vgn.de" target="_blank" rel="noopener" class="stadtlink-card">
+          <span class="stadtlink-icon">🚌</span>
+          <div><strong>VGN – Öffentlicher Nahverkehr</strong><span>Bus- und Bahnverbindungen</span></div>
+        </a>
+        <a href="https://www.klinikum-fichtelgebirge.de" target="_blank" rel="noopener" class="stadtlink-card">
+          <span class="stadtlink-icon">🏥</span>
+          <div><strong>Klinikum Fichtelgebirge</strong><span>Medizinische Versorgung</span></div>
+        </a>
+        <a href="https://www.landkreis-wunsiedel.de" target="_blank" rel="noopener" class="stadtlink-card">
+          <span class="stadtlink-icon">🗺️</span>
+          <div><strong>Landkreis Wunsiedel</strong><span>Behörden &amp; Verwaltung</span></div>
+        </a>
+        <a href="https://www.km.bayern.de/schulsuche" target="_blank" rel="noopener" class="stadtlink-card">
+          <span class="stadtlink-icon">🔍</span>
+          <div><strong>Schulsuche Bayern</strong><span>Alle Schulen im Überblick (KM Bayern)</span></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── KONTAKT ───────────────────────────────────────────────────── -->
+<section id="kontakt">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Kontakt</div>
+      <h2 class="section-title">Interesse? Jetzt anfragen!</h2>
+      <p class="section-subtitle">Stellen Sie Ihre unverbindliche Anfrage – wir melden uns schnellstmöglich bei Ihnen. Alle Mietverträge sind befristet und auf die Dauer des Referendariats abgestimmt.</p>
+    </div>
+    <div class="kontakt-grid">
+      <div class="kontakt-info reveal">
+        <h3>Ihr Ansprechpartner</h3>
+        <p><strong style="color:white;">Manfred Süß</strong><br>
+        Stilzelweg 44<br>
+        95615 Marktredwitz</p>
+        <a href="tel:+4917282093500" class="tel-link">📞 0172 820 93 50</a>
+        <p style="font-size:.85rem; opacity:.75;">Erreichbar Mo–Fr, gerne auch abends nach Vereinbarung.</p>
+        <div class="hinweis-box">
+          <strong>Wichtiger Hinweis zum Mietvertrag</strong>
+          Alle Mietverträge werden ausschließlich <strong>befristet</strong> abgeschlossen – passend zur Dauer Ihres Referendariats. Eine Verlängerung ist nach Absprache möglich.
+        </div>
+        <div class="hinweis-box" style="margin-top:.75rem;">
+          <strong>Miete</strong>
+          Die Miethöhe wird individuell vereinbart und richtet sich nach Zimmer und Mietdauer. Sprechen Sie uns einfach an!
+        </div>
+      </div>
+      <div class="reveal">
+        <form class="anfrage-form" id="anfrage-form" onsubmit="handleSubmit(event)">
+          <h3>Anfrage senden</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="vorname">Vorname *</label>
+              <input type="text" id="vorname" name="vorname" required placeholder="Max">
+            </div>
+            <div class="form-group">
+              <label for="nachname">Nachname *</label>
+              <input type="text" id="nachname" name="nachname" required placeholder="Mustermann">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">E-Mail-Adresse *</label>
+              <input type="email" id="email" name="email" required placeholder="max@beispiel.de">
+            </div>
+            <div class="form-group">
+              <label for="telefon">Telefon</label>
+              <input type="tel" id="telefon" name="telefon" placeholder="0172 000 0000">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="zimmer">Gewünschtes Zimmer</label>
+              <select id="zimmer" name="zimmer">
+                <option value="egal">Egal / noch offen</option>
+                <option value="zimmer1">Zimmer 1 – Erdgeschoss</option>
+                <option value="zimmer2">Zimmer 2 – Erdgeschoss</option>
+                <option value="zimmer3">Zimmer 3 – Dachgeschoss</option>
+                <option value="zimmer4">Zimmer 4 – Dachgeschoss</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="einzug">Gewünschter Einzug</label>
+              <input type="month" id="einzug" name="einzug">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="dauer">Dauer des Referendariats / Mietdauer</label>
+            <input type="text" id="dauer" name="dauer" placeholder="z. B. 18 Monate (bis Sept. 2027)">
+          </div>
+          <div class="form-group">
+            <label for="nachricht">Ihre Nachricht</label>
+            <textarea id="nachricht" name="nachricht" placeholder="Bitte beschreiben Sie kurz Ihre Situation und Wünsche ..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary form-submit">Anfrage jetzt absenden →</button>
+          <p class="form-hint">* Pflichtfelder. Ihre Daten werden nur zur Bearbeitung Ihrer Anfrage verwendet.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ───────────────────────────────────────────────────── -->
+<footer>
+  <p>
+    Wohnraumangebot für Referendar:innen ·
+    Kupferhammerstraße 60, 95615 Marktredwitz ·
+    Kontakt: <a href="tel:+4917282093500">0172 820 93 50</a> (Manfred Süß)
+  </p>
+  <p style="margin-top:.4rem; font-size:.75rem; opacity:.6;">
+    Alle Mietverträge sind befristet. Miete auf Anfrage. Irrtümer vorbehalten.
+  </p>
+</footer>
+
+<!-- ─── LIGHTBOX ─────────────────────────────────────────────────── -->
+<div id="lightbox">
+  <button id="lb-close" onclick="closeLightbox()" title="Schließen">✕</button>
+  <button id="lb-prev" onclick="lbPrev()" title="Zurück">‹</button>
+  <img id="lb-img" src="" alt="Vollbild">
+  <button id="lb-next" onclick="lbNext()" title="Weiter">›</button>
+  <div id="lb-counter"></div>
+</div>
+
+<script>
+  // ── LIGHTBOX ───────────────────────────────────────────────────────
+  const galleryItems = Array.from(document.querySelectorAll('.gallery-item img'));
+  let lbPool = galleryItems;
+  let lbIdx = 0;
+
+  document.getElementById('galerie').addEventListener('click', function(e) {
+    const item = e.target.closest('.gallery-item');
+    if (!item) return;
+    const img = item.querySelector('img');
+    lbPool = galleryItems;
+    lbIdx = galleryItems.indexOf(img);
+    showLb(lbIdx);
+  });
+
+  function openLightboxSrc(el) {
+    if (typeof el === 'string') {
+      document.getElementById('lb-img').src = el;
+      document.getElementById('lb-counter').textContent = '';
+      document.getElementById('lightbox').classList.add('active');
+      document.body.style.overflow = 'hidden';
+      return;
+    }
+    // collect all siblings from same group (zimmer-thumbs or galerie)
+    const group = el.closest('.zimmer-thumbs');
+    if (group) {
+      lbPool = Array.from(group.querySelectorAll('img'));
+    } else {
+      lbPool = galleryItems;
+    }
+    lbIdx = lbPool.indexOf(el);
+    if (lbIdx === -1) lbIdx = 0;
+    showLb(lbIdx);
+  }
+
+  function showLb(i) {
+    if (i < 0) i = lbPool.length - 1;
+    if (i >= lbPool.length) i = 0;
+    lbIdx = i;
+    document.getElementById('lb-img').src = lbPool[i].src;
+    document.getElementById('lb-counter').textContent = (i + 1) + ' / ' + lbPool.length;
+    document.getElementById('lightbox').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+    lbPool = galleryItems; // reset to default pool
+  }
+
+  function lbPrev() { showLb(lbIdx - 1); }
+  function lbNext() { showLb(lbIdx + 1); }
+
+  document.getElementById('lightbox').addEventListener('click', function(e) {
+    if (e.target === this) closeLightbox();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    const lb = document.getElementById('lightbox');
+    if (!lb.classList.contains('active')) return;
+    if (e.key === 'Escape')      closeLightbox();
+    if (e.key === 'ArrowLeft')   lbPrev();
+    if (e.key === 'ArrowRight')  lbNext();
+  });
+
+  // ── CONTACT FORM → MAILTO ──────────────────────────────────────────
+  function handleSubmit(e) {
+    e.preventDefault();
+    const f = e.target;
+    const vorname   = f.vorname.value.trim();
+    const nachname  = f.nachname.value.trim();
+    const email     = f.email.value.trim();
+    const telefon   = f.telefon.value.trim();
+    const zimmer    = f.zimmer.options[f.zimmer.selectedIndex].text;
+    const einzug    = f.einzug.value || 'noch offen';
+    const dauer     = f.dauer.value.trim() || 'noch offen';
+    const nachricht = f.nachricht.value.trim();
+
+    const subject = encodeURIComponent('Zimmeranfrage Referendariat – ' + vorname + ' ' + nachname);
+    const body = encodeURIComponent(
+      'Guten Tag Herr Süß,\n\n' +
+      'ich interessiere mich für ein Zimmer in der Kupferhammerstraße 60.\n\n' +
+      'Name: ' + vorname + ' ' + nachname + '\n' +
+      'E-Mail: ' + email + '\n' +
+      'Telefon: ' + (telefon || '–') + '\n' +
+      'Gewünschtes Zimmer: ' + zimmer + '\n' +
+      'Gewünschter Einzug: ' + einzug + '\n' +
+      'Mietdauer: ' + dauer + '\n\n' +
+      'Nachricht:\n' + (nachricht || '–') + '\n\n' +
+      'Mit freundlichen Grüßen\n' + vorname + ' ' + nachname
+    );
+
+    // ═══════════════════════════════════════════════════════════
+    // HINWEIS: Bitte ersetzen Sie 'ihre-email@beispiel.de' mit
+    // Ihrer eigenen E-Mail-Adresse (z. B. manfred.suess@example.de)
+    // ═══════════════════════════════════════════════════════════
+    const toEmail = 'ihre-email@beispiel.de';
+    window.location.href = 'mailto:' + toEmail + '?subject=' + subject + '&body=' + body;
+  }
+
+  // ── GALERIE FILTER ──────────────────────────────────────────────────
+  document.querySelectorAll('.gf-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.gf-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      const filter = this.dataset.filter;
+      document.querySelectorAll('.gallery-section').forEach(sec => {
+        sec.style.display = (filter === 'all' || sec.dataset.cat === filter) ? '' : 'none';
+      });
+    });
+  });
+
+  // ── SCROLL REVEAL ──────────────────────────────────────────────────
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ── YOUTUBE FACADE ─────────────────────────────────────────────────
+  function loadYT() {
+    const facade = document.getElementById('yt-facade');
+    const wrapper = facade.parentElement;
+    const iframe = document.createElement('iframe');
+    iframe.src = 'https://www.youtube-nocookie.com/embed/KFESGuiNSlo?autoplay=1&rel=0';
+    iframe.title = 'Video-Rundgang Marktredwitz';
+    iframe.frameBorder = '0';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allowFullscreen = true;
+    iframe.style.cssText = 'width:100%;height:100%;display:block;';
+    wrapper.replaceChild(iframe, facade);
+  }
+</script>
+
+<!-- ── Leaflet ───────────────────────────────────────────────────── -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function () {
+  const PLACES = [
+    { lat: 50.0026898, lng: 12.0998998, emoji: '🏠', label: 'Unterkunft', desc: 'Kupferhammerstraße 60', sub: '95615 Marktredwitz', type: 'home' },
+    { lat: 50.0072002, lng: 12.0923302, emoji: '🎓', label: 'OHG',         desc: 'Otto-Hahn-Gymnasium',           sub: 'Schulstraße 10 · ca. 8 min Rad', type: 'school' },
+    { lat: 50.0078209, lng: 12.0892120, emoji: '📚', label: 'Realschule',  desc: 'Luitpold-Realschule',           sub: 'ca. 9 min Rad', type: 'school' },
+    { lat: 50.0063599, lng: 12.0894777, emoji: '🏫', label: 'Mittelschule',desc: 'Alexander-v.-Humboldt MS',      sub: 'Schulstraße 1 · ca. 7 min Rad', type: 'school' },
+    { lat: 50.0028611, lng: 12.0863416, emoji: '🏫', label: 'Grundschule', desc: 'Grundschule Marktredwitz',      sub: 'Bauerstraße 4 · ca. 8 min Rad', type: 'school' },
+    { lat: 50.0074660, lng: 12.0910472, emoji: '📖', label: 'FOS/BOS',     desc: 'FOS/BOS Marktredwitz',          sub: 'Schulstraße 12 · ca. 8 min Rad', type: 'school' },
+    { lat: 50.0044648, lng: 12.0824010, emoji: '🚂', label: 'Bahnhof',     desc: 'Bahnhof Marktredwitz',          sub: 'ca. 8 min Rad', type: 'infra' },
+    { lat: 50.0018257, lng: 12.0662375, emoji: '🏥', label: 'Klinikum',    desc: 'Klinikum Fichtelgebirge',       sub: 'ca. 12 min Rad', type: 'infra' },
+    { lat: 50.0067541, lng: 12.1077476, emoji: '🛒', label: 'Lidl',        desc: 'Lidl Supermarkt',               sub: 'ca. 8 min Rad', type: 'infra' },
+    { lat: 50.0042864, lng: 12.1015232, emoji: '🛒', label: 'E center',    desc: 'E center Schraml',              sub: 'Wölsauer Str. 14 · ca. 5 min Rad', type: 'infra' },
+    { lat: 50.0039168, lng: 12.0982713, emoji: '💪', label: 'clever fit',  desc: 'clever fit Marktredwitz',       sub: 'Wölsauer Str. 8 · ca. 4 min Rad', type: 'infra' },
+  ];
+
+  const map = L.map('illus-map', {
+    zoomControl: true,
+    scrollWheelZoom: false,
+    attributionControl: true,
+  });
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 20,
+  }).addTo(map);
+
+  PLACES.forEach(p => {
+    const isHome = p.type === 'home';
+    const anchor = isHome ? [23, 56] : [19, 48];
+    const icon = L.divIcon({
+      className: '',
+      html: `<div class="map-pin map-pin--${p.type}">
+        <span class="map-pin-emoji">${p.emoji}</span>
+        <span class="map-pin-label">${p.label}</span>
+      </div>`,
+      iconSize: null,
+      iconAnchor: anchor,
+      popupAnchor: [0, -(anchor[1] + 4)],
+    });
+
+    L.marker([p.lat, p.lng], { icon })
+      .addTo(map)
+      .bindPopup(
+        `<div class="map-popup"><strong>${p.desc}</strong><small>${p.sub}</small></div>`,
+        { maxWidth: 220, closeButton: false }
+      );
+  });
+
+  const bounds = L.latLngBounds(PLACES.map(p => [p.lat, p.lng]));
+  map.fitBounds(bounds, { padding: [48, 48] });
+}());
+</script>
+</body>
+</html>
