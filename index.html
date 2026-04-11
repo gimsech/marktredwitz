@@ -137,7 +137,10 @@
     }
 
     @media (max-width: 700px) {
-      .hero-content { padding-bottom: 11rem; }
+      #hero { flex-direction: column; align-items: stretch; justify-content: space-between; }
+      .hero-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 5rem; padding-bottom: 2rem; }
+      .hero-facts { position: static; width: 100%; }
+      .scroll-hint { display: none; }
     }
 
     .hero-tags {
@@ -1051,11 +1054,44 @@
     .dist-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
     @media (max-width: 600px) {
-      /* hide Auto + Fuß columns, keep only Name + Rad */
-      .dist-table th:nth-child(3),
-      .dist-table th:nth-child(4),
-      .dist-table td:nth-child(3),
-      .dist-table td:nth-child(4) { display: none; }
+      .dist-table-wrap { overflow-x: visible; }
+      .dist-table thead { display: none; }
+      .dist-table, .dist-table tbody, .dist-table tr, .dist-table td { display: block; width: 100%; }
+      .dist-table tr {
+        border: 1px solid rgba(0,0,0,.09);
+        border-radius: 8px;
+        margin-bottom: .75rem;
+        padding: .5rem .75rem;
+        background: var(--white);
+      }
+      .dist-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: .4rem 0;
+        border-bottom: 1px solid rgba(0,0,0,.05);
+        font-size: .875rem;
+        white-space: normal;
+      }
+      .dist-table td:last-child { border-bottom: none; }
+      .dist-table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--green);
+        font-size: .75rem;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        flex-shrink: 0;
+        margin-right: 1rem;
+      }
+      .dist-table td:first-child {
+        flex-direction: column;
+        align-items: flex-start;
+        border-bottom: 2px solid var(--accent);
+        padding-bottom: .5rem;
+        font-size: .95rem;
+      }
+      .dist-table td:first-child::before { display: none; }
     }
     .dist-table tr:last-child td { border-bottom: none; }
     .dist-table a { color: var(--green); text-decoration: none; }
@@ -1550,39 +1586,39 @@
           <tbody>
             <tr>
               <td><a href="https://www.ohg-marktredwitz.de" target="_blank" rel="noopener">Otto-Hahn-Gymnasium</a><br><small style="color:var(--muted); font-weight:400;">Schulstraße 10</small></td>
-              <td>ca. 4 min</td>
-              <td>ca. 4 min</td>
-              <td>ca. 15 min</td>
+              <td data-label="🚲 Rad">ca. 4 min</td>
+              <td data-label="🚗 Auto">ca. 4 min</td>
+              <td data-label="🚶 Fuß">ca. 15 min</td>
             </tr>
             <tr>
               <td>Fichtelgebirgsrealschule</td>
-              <td>ca. 4 min</td>
-              <td>ca. 4 min</td>
-              <td>ca. 16 min</td>
+              <td data-label="🚲 Rad">ca. 4 min</td>
+              <td data-label="🚗 Auto">ca. 4 min</td>
+              <td data-label="🚶 Fuß">ca. 16 min</td>
             </tr>
             <tr>
               <td><a href="https://mittelschule.marktredwitz.de" target="_blank" rel="noopener">Alexander-v.-Humboldt Mittelschule</a><br><small style="color:var(--muted); font-weight:400;">Schulstraße 1</small></td>
-              <td>ca. 4 min</td>
-              <td>ca. 5 min</td>
-              <td>ca. 15 min</td>
+              <td data-label="🚲 Rad">ca. 4 min</td>
+              <td data-label="🚗 Auto">ca. 5 min</td>
+              <td data-label="🚶 Fuß">ca. 15 min</td>
             </tr>
             <tr>
               <td>Grundschule Marktredwitz<br><small style="color:var(--muted); font-weight:400;">Bauerstraße 4</small></td>
-              <td>ca. 4 min</td>
-              <td>ca. 4 min</td>
-              <td>ca. 16 min</td>
+              <td data-label="🚲 Rad">ca. 4 min</td>
+              <td data-label="🚗 Auto">ca. 4 min</td>
+              <td data-label="🚶 Fuß">ca. 16 min</td>
             </tr>
             <tr>
               <td><a href="https://www.fosbos-mak.de" target="_blank" rel="noopener">FOS/BOS Marktredwitz</a><br><small style="color:var(--muted); font-weight:400;">Schulstraße 12</small></td>
-              <td>ca. 4 min</td>
-              <td>ca. 4 min</td>
-              <td>ca. 15 min</td>
+              <td data-label="🚲 Rad">ca. 4 min</td>
+              <td data-label="🚗 Auto">ca. 4 min</td>
+              <td data-label="🚶 Fuß">ca. 15 min</td>
             </tr>
             <tr>
               <td>Berufsschule Marktredwitz<br><small style="color:var(--muted); font-weight:400;">Schulstraße 12</small></td>
-              <td>ca. 4 min</td>
-              <td>ca. 4 min</td>
-              <td>ca. 15 min</td>
+              <td data-label="🚲 Rad">ca. 4 min</td>
+              <td data-label="🚗 Auto">ca. 4 min</td>
+              <td data-label="🚶 Fuß">ca. 15 min</td>
             </tr>
           </tbody>
         </table>
@@ -1604,39 +1640,39 @@
           <tbody>
             <tr>
               <td>Innenstadt / Marktplatz</td>
-              <td>ca. 7 min</td>
-              <td>ca. 4 min</td>
-              <td>ca. 21 min</td>
+              <td data-label="🚲 Rad">ca. 7 min</td>
+              <td data-label="🚗 Auto">ca. 4 min</td>
+              <td data-label="🚶 Fuß">ca. 21 min</td>
             </tr>
             <tr>
               <td>Supermarkt (Lidl, Edeka)</td>
-              <td>ca. 1 min</td>
-              <td>ca. 5 min</td>
-              <td>ca. 4 min</td>
+              <td data-label="🚲 Rad">ca. 1 min</td>
+              <td data-label="🚗 Auto">ca. 5 min</td>
+              <td data-label="🚶 Fuß">ca. 4 min</td>
             </tr>
             <tr>
               <td>Bahnhof Marktredwitz</td>
-              <td>ca. 7 min</td>
-              <td>ca. 4 min</td>
-              <td>ca. 21 min</td>
+              <td data-label="🚲 Rad">ca. 7 min</td>
+              <td data-label="🚗 Auto">ca. 4 min</td>
+              <td data-label="🚶 Fuß">ca. 21 min</td>
             </tr>
             <tr>
               <td><a href="https://www.klinikum-fichtelgebirge.de" target="_blank" rel="noopener">Klinikum Fichtelgebirge</a></td>
-              <td>ca. 8 min</td>
-              <td>ca. 7 min</td>
-              <td>ca. 34 min</td>
+              <td data-label="🚲 Rad">ca. 8 min</td>
+              <td data-label="🚗 Auto">ca. 7 min</td>
+              <td data-label="🚶 Fuß">ca. 34 min</td>
             </tr>
             <tr>
               <td>Fitnesstudio</td>
-              <td>ca. 1 min</td>
-              <td>ca. 3 min</td>
-              <td>ca. 4 min</td>
+              <td data-label="🚲 Rad">ca. 1 min</td>
+              <td data-label="🚗 Auto">ca. 3 min</td>
+              <td data-label="🚶 Fuß">ca. 4 min</td>
             </tr>
             <tr>
               <td>Autobahn A93 (Anschluss)</td>
-              <td>–</td>
-              <td>ca. 10 min</td>
-              <td>–</td>
+              <td data-label="🚲 Rad">–</td>
+              <td data-label="🚗 Auto">ca. 10 min</td>
+              <td data-label="🚶 Fuß">–</td>
             </tr>
           </tbody>
         </table>
