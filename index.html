@@ -494,7 +494,7 @@
           <div class="note">Erreichbar Mo–Fr, gerne auch abends nach Vereinbarung.</div>
         </div>
         <div class="note-box"><b>Befristeter Mietvertrag</b><span>Alle Verträge werden befristet abgeschlossen – passend zur Dauer Ihres Referendariats. Verlängerung nach Absprache möglich.</span></div>
-        <div class="note-box"><b>Miete</b><span>Kaltmiete im Monat: Zimmer 1 340 € · Zimmer 2 300 € · Zimmer 3 390 € · Zimmer 4 430 €. Dazu kommen 75 € Nebenkosten im Monat und eine Kaution.</span></div>
+        <div class="note-box"><b>Miete</b><span>Kaltmiete im Monat: Zimmer 1 340 € · Zimmer 2 300 € · Zimmer 3 390 € · Zimmer 4 430 €. Dazu kommen 75 € Nebenkosten im Monat. Die Kaution beträgt zwei Kaltmieten und kann in drei Monatsraten gezahlt werden.</span></div>
       </div>
 
       <div class="form-card" id="formCard">
@@ -551,16 +551,16 @@
 
     // ── DATEN ────────────────────────────────────────────────────────
     const rooms = [
-      { title:'Zimmer 1', floor:'Erdgeschoss', size:'12 m² · 3,60 × 3,35 m', rent:'340 €', tags:['Abschließbar'],
+      { title:'Zimmer 1', floor:'Erdgeschoss', size:'12 m² · 3,60 × 3,35 m', rent:'340 €', deposit:'680 €', tags:['Abschließbar'],
         desc:'Helles Zimmer im Erdgeschoss, vollständig möbliert, mit direktem Zugang zu Küche und Wohnzimmer.',
         folder:'EG/Schlafzimmer', names:['001.JPG','002.JPG'] },
-      { title:'Zimmer 2', floor:'Erdgeschoss', size:'10,36 m² · 4,43 × 2,34 m', rent:'300 €', tags:['Abschließbar','Gartenblick'],
+      { title:'Zimmer 2', floor:'Erdgeschoss', size:'10,36 m² · 4,43 × 2,34 m', rent:'300 €', deposit:'600 €', tags:['Abschließbar','Gartenblick'],
         desc:'Ruhiges, kompaktes Zimmer mit Blick in den Garten, vollständig möbliert.',
         folder:'EG/KleinesZimmer', names:['001.JPG','002.JPG','003.JPG','004.JPG','005.JPG'] },
-      { title:'Zimmer 3', floor:'Dachgeschoss', size:'14,28 m² · 3,98 × 3,59 m', rent:'390 €', tags:['Bett','Schreibtisch','Kleiderschrank','Kleines Sofa','Abschließbar'],
+      { title:'Zimmer 3', floor:'Dachgeschoss', size:'14,28 m² · 3,98 × 3,59 m', rent:'390 €', deposit:'780 €', tags:['Bett','Schreibtisch','Kleiderschrank','Kleines Sofa','Abschließbar'],
         desc:'Gemütliches Dachgeschoss-Zimmer mit Schreibtisch, Bett, Kleiderschrank und kleinem Sofa – ruhig und behaglich.',
         folder:'1OG/Zimmer', names:['001.JPG','002.JPG','003.JPG'] },
-      { title:'Zimmer 4', floor:'Dachgeschoss', size:'14 m² · 3,69 × 3,89 m', rent:'430 €', tags:['Ankleidezimmer','Höhenverstellbarer Schreibtisch','Bett','Kleiderschrank','Kleines Sofa','Abschließbar'],
+      { title:'Zimmer 4', floor:'Dachgeschoss', size:'14 m² · 3,69 × 3,89 m', rent:'430 €', deposit:'860 €', tags:['Ankleidezimmer','Höhenverstellbarer Schreibtisch','Bett','Kleiderschrank','Kleines Sofa','Abschließbar'],
         desc:'Geräumiges Dachzimmer mit eigenem Ankleidezimmer, höhenverstellbarem Schreibtisch, Bett, Kleiderschrank und kleinem Sofa.',
         folder:'1OG/Zimmer2', names:['001.JPG','002.JPG','003.JPG','004.JPG','005.JPG','006.JPG'] }
     ];
@@ -637,7 +637,7 @@
           '<div class="room-title"><h3>'+esc(r.title)+' · '+esc(r.floor)+'</h3><span>'+esc(r.size)+'</span></div>'+
           '<p>'+esc(r.desc)+'</p>'+
           '<div class="chips">'+r.tags.map(t=>'<span class="chip">'+esc(t)+'</span>').join('')+'</div>'+
-          '<div class="room-foot"><span><b>'+esc(r.rent)+' kalt</b><small class="nk">+ 75 € Nebenkosten im Monat</small></span><a href="#kontakt">Anfragen →</a></div>'+
+          '<div class="room-foot"><span><b>'+esc(r.rent)+' kalt</b><small class="nk">+ 75 € Nebenkosten im Monat · Kaution '+esc(r.deposit)+'</small></span><a href="#kontakt">Anfragen →</a></div>'+
         '</div>';
       card.querySelector('.room-cover').addEventListener('click', () => openLb(imgs, 0));
       roomGrid.appendChild(card);
