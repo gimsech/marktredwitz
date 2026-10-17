@@ -6,9 +6,14 @@
   <title>Zimmer für Referendar:innen – Marktredwitz</title>
   <meta name="description" content="Möblierte Zimmer in ruhiger Lage für Referendar:innen. Kupferhammerstraße 60, 95615 Marktredwitz. Befristete Mietverträge. Jetzt anfragen!">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏡</text></svg>">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="canonical" href="http://mak.psue.de/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:url" content="http://mak.psue.de/">
+  <meta property="og:title" content="Möblierte Zimmer für Referendar:innen in Marktredwitz">
+  <meta property="og:description" content="4 möblierte Einzelzimmer ab 300 € kalt im Haus mit Garten, Kupferhammerstraße 60. Befristete Mietverträge.">
+  <meta property="og:image" content="http://mak.psue.de/_images/Haus/001.jpg">
+  <link rel="stylesheet" href="fonts/fonts.css">
   <style>
     :root{
       --bg:#f6f1e9; --surface:#fffdf8; --surface-2:#efe9df; --surface-3:#eef2ee;
@@ -24,8 +29,9 @@
     a{ color:inherit; text-decoration:none; }
     button{ font-family:inherit; }
     ::selection{ background:var(--accent); color:#fff; }
+    :focus-visible{ outline:3px solid var(--accent); outline-offset:3px; }
 
-    @keyframes kb{ from{ transform:scale(1.02); } to{ transform:scale(1.12); } }
+    @keyframes kb{ from{ transform:scale(1.08); } to{ transform:scale(1); } }
     @keyframes fadeUp{ from{ opacity:0; transform:translateY(18px); } to{ opacity:1; transform:translateY(0); } }
     @keyframes fadeIn{ from{ opacity:0; } to{ opacity:1; } }
     @media (prefers-reduced-motion:reduce){ *{ animation:none !important; } html{ scroll-behavior:auto; } }
@@ -78,7 +84,7 @@
     .hero-actions{ display:flex; flex-wrap:wrap; gap:14px; }
     .hero-media{ position:relative; animation:fadeUp .8s .1s ease both; }
     .hero-media figure{ margin:0; position:relative; aspect-ratio:4/5; border-radius:20px; overflow:hidden; box-shadow:0 30px 60px -24px rgba(41,38,33,0.45); }
-    .hero-media img{ width:100%; height:100%; object-fit:cover; animation:kb 20s ease-in-out infinite alternate; }
+    .hero-media img{ width:100%; height:100%; object-fit:cover; animation:kb 6s ease-out both; }
     .hero-card{ position:absolute; left:-14px; bottom:-18px; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:16px 20px; box-shadow:0 18px 40px -16px rgba(41,38,33,0.4); }
     .hero-card b{ display:block; font-family:var(--serif); font-weight:500; font-size:20px; line-height:1; margin-bottom:6px; }
     .hero-card span{ font-size:13px; color:var(--muted); letter-spacing:0.02em; }
@@ -174,6 +180,10 @@
     .addr-card .v{ font-family:var(--serif); font-size:20px; line-height:1.3; }
     .map{ aspect-ratio:4/3; border-radius:18px; overflow:hidden; border:1px solid var(--border); box-shadow:0 24px 50px -26px rgba(41,38,33,0.45); }
     .map iframe{ width:100%; height:100%; border:0; }
+    .map-consent{ width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:24px; text-align:center; background:var(--surface-3); }
+    .map-consent p{ font-size:14px; line-height:1.5; color:var(--ink-soft); max-width:30em; margin:0; }
+    .map-consent button{ border:0; cursor:pointer; }
+    .video-note{ font-size:13px; color:var(--muted); margin:14px auto 0; max-width:40em; }
 
     /* ── UMGEBUNG ── */
     .umg-grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:40px; }
@@ -293,7 +303,7 @@
         <a href="#standort">Lage</a>
       </div>
       <a href="#kontakt" class="btn-pill">Anfragen</a>
-      <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen"><span></span></button>
+      <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobileMenu"><span></span></button>
     </div>
   </nav>
   <div class="mobile-menu" id="mobileMenu">
@@ -321,7 +331,7 @@
     </div>
     <div class="hero-media">
       <figure>
-        <img src="_images/Haus/001.jpg" alt="Außenansicht des Hauses in Marktredwitz">
+        <img src="_images/Haus/001.jpg" alt="Außenansicht des Hauses in Marktredwitz" fetchpriority="high">
       </figure>
       <div class="hero-card">
         <b>Kupferhammerstraße 60</b>
@@ -380,7 +390,7 @@
         </div>
       </div>
       <figure class="photo">
-        <img src="_images/Haus/002.jpg" alt="Außenansicht">
+        <img src="_images/Haus/002.jpg" alt="Haus mit Garten, Außenansicht" loading="lazy">
       </figure>
     </div>
   </section>
@@ -417,10 +427,11 @@
     <p style="font-size:16px; color:var(--muted); max-width:32em; margin:0 auto 34px;">Verschaffen Sie sich einen ersten Eindruck von Ihrem neuen Zuhause auf Zeit.</p>
     <div class="video-frame" id="videoFrame">
       <button class="video-play" id="videoPlay" aria-label="Video abspielen">
-        <img src="https://img.youtube.com/vi/KFESGuiNSlo/maxresdefault.jpg" alt="Video-Vorschau">
+        <img src="_images/video-vorschau.jpg" alt="Vorschau des Video-Rundgangs" loading="lazy">
         <span class="play-ring"><span><span class="play-tri"></span></span></span>
       </button>
     </div>
+    <p class="video-note">Das Video liegt bei YouTube. Erst beim Klick auf „Abspielen“ wird es von dort geladen.</p>
   </section>
 
   <!-- GRUNDRISSE -->
@@ -429,7 +440,7 @@
       <div class="head-block" style="max-width:40em;">
         <div class="eyebrow">Aufteilung</div>
         <h2 class="h" style="margin-bottom:14px;">Grundrisse</h2>
-        <p style="font-size:16px; color:var(--muted); margin:0;">Das Haus verteilt sich auf Erdgeschoss, Obergeschoss und Keller. Klicken Sie auf einen Grundriss, um ihn zu vergrößern.</p>
+        <p style="font-size:16px; color:var(--muted); margin:0;">Das Haus verteilt sich auf Erdgeschoss, Dachgeschoss und Keller. Klicken Sie auf einen Grundriss, um ihn zu vergrößern.</p>
       </div>
       <div class="fp-grid" id="fpGrid"></div>
     </div>
@@ -440,8 +451,8 @@
     <div class="lage">
       <div>
         <div class="eyebrow">Lage</div>
-        <h2 class="h" style="margin-bottom:18px;">Zentral &amp; gut angebunden</h2>
-        <p>Kupferhammerstraße 60 liegt zentral – Schulen, Bahnhof und Einkauf sind bequem per Rad erreichbar. Ein Supermarkt liegt nur eine Minute entfernt.</p>
+        <h2 class="h" style="margin-bottom:18px;">Ruhig &amp; gut angebunden</h2>
+        <p>Kupferhammerstraße 60 liegt ruhig und trotzdem nah dran: Schulen, Bahnhof und Innenstadt sind in rund 7 Minuten mit dem Rad erreichbar. Ein Supermarkt liegt nur eine Minute entfernt.</p>
         <div class="addr-card">
           <div class="k">Adresse</div>
           <div class="v">Kupferhammerstraße 60<br>95615 Marktredwitz</div>
@@ -449,7 +460,7 @@
         <a href="https://maps.google.com/?q=Kupferhammerstra%C3%9Fe+60,+95615+Marktredwitz" target="_blank" rel="noopener" class="cta-sm">In Google Maps öffnen →</a>
       </div>
       <div class="map">
-        <iframe src="https://www.google.com/maps?q=Kupferhammerstra%C3%9Fe+60,+95615+Marktredwitz&output=embed" title="Karte" loading="lazy"></iframe>
+        <div class="map-consent" id="mapConsent"><p>Die Karte kommt von Google Maps. Erst beim Klick wird sie geladen, dabei gehen Daten an Google.</p><button type="button" class="cta-sm" id="mapLoad">Karte anzeigen</button></div>
       </div>
     </div>
   </section>
@@ -538,7 +549,7 @@
   </footer>
 
   <!-- LIGHTBOX -->
-  <div class="lb" id="lightbox">
+  <div class="lb" id="lightbox" role="dialog" aria-modal="true" aria-label="Bildansicht">
     <button class="lb-close" id="lbClose" aria-label="Schließen">✕</button>
     <div class="lb-label" id="lbLabel"></div>
     <button class="lb-nav lb-prev" id="lbPrev" aria-label="Vorheriges Bild">‹</button>
@@ -576,9 +587,10 @@
       add('eg','Bad (EG)','EG/Bad',['001.JPG','002.JPG','003.JPG']);
       add('eg','WC (EG)','EG/WC',['001.JPG']);
       add('eg','Flur (EG)','EG/Flur',['001.jpg','002.jpg','003.jpg','004.JPG']);
-      add('og','Zimmer 3 (1. OG)','1OG/Zimmer',['001.JPG','002.JPG','003.JPG']);
-      add('og','Zimmer 4 (1. OG)','1OG/Zimmer2',['001.JPG','002.JPG','003.JPG','004.JPG','005.JPG','006.JPG']);
-      add('og','Bad (1. OG)','1OG/Bad',['001.JPG','002.JPG','003.JPG']);
+      add('og','Flur (DG)','1OG/Flur',['001.JPG','002.JPG']);
+      add('og','Zimmer 3 (DG)','1OG/Zimmer',['001.JPG','002.JPG','003.JPG']);
+      add('og','Zimmer 4 (DG)','1OG/Zimmer2',['001.JPG','002.JPG','003.JPG','004.JPG','005.JPG','006.JPG']);
+      add('og','Bad (DG)','1OG/Bad',['001.JPG','002.JPG','003.JPG']);
       add('keller','Treppe','Treppe',['001.JPG','002.jpg','003.JPG']);
       add('keller','Keller','Keller',['001.JPG','002.JPG','003.JPG','004.JPG','005.JPG','006.JPG','007.JPG','008.JPG','009.JPG','010.JPG']);
       add('garten','Garten','Garten',['001.jpg','002.jpg','003.jpg','004.jpg','005.jpg','006.jpg','007.jpg','008.jpg']);
@@ -588,7 +600,7 @@
 
     const floorplans = [
       { src:B+'sparkasse/EG.jpg', group:'Erdgeschoss (EG)' },
-      { src:B+'sparkasse/DG.jpg', group:'Obergeschoss (OG)' },
+      { src:B+'sparkasse/DG.jpg', group:'Dachgeschoss (DG)' },
       { src:B+'sparkasse/KG.jpg', group:'Kellergeschoss' }
     ];
 
@@ -619,6 +631,7 @@
       { title:'Schulsuche Bayern', sub:'Alle Schulen im Überblick', url:'https://www.km.bayern.de/schulsuche' }
     ];
 
+    const TH = src => src.replace('_images/', '_images/_thumbs/');
     const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
     // ── ZIMMER ───────────────────────────────────────────────────────
@@ -629,7 +642,7 @@
       card.className = 'room';
       card.innerHTML =
         '<button class="room-cover" aria-label="Fotos von '+esc(r.title)+'">'+
-          '<img src="'+imgs[0].src+'" alt="'+esc(r.title)+'">'+
+          '<img src="'+TH(imgs[0].src)+'" alt="'+esc(r.title)+'" loading="lazy" decoding="async">'+
           '<span class="tagimg">'+imgs.length+' Fotos</span>'+
           '<span class="tagfloor">'+esc(r.floor)+'</span>'+
         '</button>'+
@@ -646,19 +659,21 @@
     // ── GALERIE FILTER + MASONRY ─────────────────────────────────────
     const filterDefs = [
       { id:'alle', label:'Alle' }, { id:'aussen', label:'Außen' }, { id:'eg', label:'Erdgeschoss' },
-      { id:'og', label:'1. Obergeschoss' }, { id:'keller', label:'Keller & Treppe' }, { id:'garten', label:'Garten' }
+      { id:'og', label:'Dachgeschoss' }, { id:'keller', label:'Keller & Treppe' }, { id:'garten', label:'Garten' }
     ];
     let curFilter = 'alle';
     const galFilters = document.getElementById('galFilters');
     const masonry = document.getElementById('masonry');
     filterDefs.forEach(f => {
       const b = document.createElement('button');
+      b.type = 'button';
       b.className = 'filter' + (f.id===curFilter ? ' active' : '');
+      b.setAttribute('aria-pressed', String(f.id===curFilter));
       b.textContent = f.label;
       b.addEventListener('click', () => {
         curFilter = f.id;
-        galFilters.querySelectorAll('.filter').forEach(x => x.classList.remove('active'));
-        b.classList.add('active');
+        galFilters.querySelectorAll('.filter').forEach(x => { x.classList.remove('active'); x.setAttribute('aria-pressed','false'); });
+        b.classList.add('active'); b.setAttribute('aria-pressed','true');
         renderMasonry();
       });
       galFilters.appendChild(b);
@@ -668,7 +683,8 @@
       masonry.innerHTML = '';
       list.forEach((im, idx) => {
         const btn = document.createElement('button');
-        btn.innerHTML = '<img src="'+im.src+'" alt="'+esc(im.group)+'" loading="lazy">';
+        btn.setAttribute('aria-label', im.group+' vergrößern');
+        btn.innerHTML = '<img src="'+TH(im.src)+'" alt="'+esc(im.group)+'" loading="lazy" decoding="async">';
         btn.addEventListener('click', () => openLb(list, idx));
         masonry.appendChild(btn);
       });
@@ -717,10 +733,12 @@
     const lb = document.getElementById('lightbox');
     const lbImg = document.getElementById('lbImg');
     const lbLabel = document.getElementById('lbLabel');
-    let lbList = null, lbIndex = 0;
+    let lbList = null, lbIndex = 0, lbReturn = null;
     function openLb(list, index){
+      lbReturn = document.activeElement;
       lbList = list; lbIndex = index; updateLb(); lb.classList.add('open');
       document.body.style.overflow = 'hidden';
+      document.getElementById('lbClose').focus();
     }
     function updateLb(){
       if(!lbList) return;
@@ -729,7 +747,7 @@
       lbLabel.textContent = (cur.group || '') + ' · ' + (lbIndex+1) + ' / ' + lbList.length;
     }
     function lbStep(d){ if(!lbList) return; lbIndex = (lbIndex + d + lbList.length) % lbList.length; updateLb(); }
-    function closeLb(){ lb.classList.remove('open'); lbList = null; document.body.style.overflow = ''; }
+    function closeLb(){ lb.classList.remove('open'); lbList = null; document.body.style.overflow = ''; if(lbReturn && lbReturn.focus) lbReturn.focus(); }
     document.getElementById('lbClose').addEventListener('click', closeLb);
     document.getElementById('lbPrev').addEventListener('click', e => { e.stopPropagation(); lbStep(-1); });
     document.getElementById('lbNext').addEventListener('click', e => { e.stopPropagation(); lbStep(1); });
@@ -738,6 +756,12 @@
     window.addEventListener('keydown', e => {
       if(!lbList) return;
       if(e.key === 'Escape') closeLb();
+      else if(e.key === 'Tab'){
+        const f = [document.getElementById('lbClose'), document.getElementById('lbPrev'), document.getElementById('lbNext')];
+        const i = f.indexOf(document.activeElement);
+        e.preventDefault();
+        f[(i + (e.shiftKey ? f.length - 1 : 1)) % f.length].focus();
+      }
       else if(e.key === 'ArrowLeft') lbStep(-1);
       else if(e.key === 'ArrowRight') lbStep(1);
     });
@@ -748,11 +772,17 @@
       frame.innerHTML = '<iframe src="https://www.youtube.com/embed/KFESGuiNSlo?autoplay=1" title="Video-Rundgang" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>';
     });
 
+    // ── KARTE (erst nach Klick) ──────────────────────────────────────
+    document.getElementById('mapLoad').addEventListener('click', () => {
+      document.getElementById('mapConsent').outerHTML = '<iframe src="https://www.google.com/maps?q=Kupferhammerstra%C3%9Fe+60,+95615+Marktredwitz&output=embed" title="Karte: Kupferhammerstraße 60, Marktredwitz"></iframe>';
+    });
+
     // ── MOBILE NAV ───────────────────────────────────────────────────
     const navToggle = document.getElementById('navToggle');
     const mobileMenu = document.getElementById('mobileMenu');
-    navToggle.addEventListener('click', () => mobileMenu.classList.toggle('open'));
-    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+    const setMenu = open => { mobileMenu.classList.toggle('open', open); navToggle.setAttribute('aria-expanded', String(open)); navToggle.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen'); };
+    navToggle.addEventListener('click', () => setMenu(!mobileMenu.classList.contains('open')));
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
 
     // ── STATISTIK (GoatCounter, ohne Cookies) ────────────────────────
     function track(path, title){
