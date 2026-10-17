@@ -754,9 +754,19 @@
     navToggle.addEventListener('click', () => mobileMenu.classList.toggle('open'));
     mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
 
+    // ── STATISTIK (GoatCounter, ohne Cookies) ────────────────────────
+    function track(path, title){
+      try{ if(window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path:path, title:title, event:true }); }catch(err){}
+    }
+    document.addEventListener('click', e => {
+      const a = e.target.closest && e.target.closest('a[href^="tel:"]');
+      if(a) track('klick-telefon', 'Telefonnummer angetippt');
+    });
+
     // ── KONTAKTFORMULAR → MAILTO ─────────────────────────────────────
     function handleSubmit(e){
       e.preventDefault();
+      track('anfrage-formular', 'Anfrageformular abgeschickt');
       const f = e.target;
       const vorname   = f.vorname.value.trim();
       const nachname  = f.nachname.value.trim();
@@ -793,5 +803,6 @@
         '</div>';
     }
   </script>
+  <script data-goatcounter="https://mak-psue.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>
