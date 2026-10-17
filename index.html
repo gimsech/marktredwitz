@@ -230,6 +230,8 @@
     .form-card input:focus,.form-card select:focus,.form-card textarea:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(58,91,126,0.14); }
     .form-submit{ width:100%; margin-top:20px; padding:15px; border:0; border-radius:12px; background:var(--accent); color:#fff; font:inherit; font-weight:600; font-size:16px; cursor:pointer; box-shadow:0 10px 26px rgba(58,91,126,0.30); transition:background .18s ease; }
     .form-submit:hover{ background:var(--accent-dark); }
+    .form-error{ margin:14px 0 0; padding:12px 14px; border-radius:10px; background:#f7e3e0; color:#8c2a20; font-size:14px; line-height:1.5; }
+    .form-submit:disabled{ opacity:.7; cursor:wait; }
     .form-fine{ font-size:12.5px; color:var(--muted-2); margin:14px 0 0; }
     .thanks{ text-align:center; padding:40px 12px; }
     .thanks .check{ width:64px; height:64px; margin:0 auto 22px; border-radius:50%; background:var(--surface-3); display:grid; place-items:center; }
@@ -507,13 +509,13 @@
           <a href="tel:+491728209350" class="cta-sm" style="font-size:16px;">0172 820 93 50</a>
           <div class="note">Erreichbar Mo–Fr, gerne auch abends nach Vereinbarung.</div>
         </div>
-        <div class="note-box"><b>Befristeter Mietvertrag</b><span>Alle Verträge werden befristet abgeschlossen – passend zur Dauer Ihres Referendariats. Verlängerung nach Absprache möglich.</span></div>
+        <div class="note-box"><b>Befristeter Mietvertrag</b><span>Alle Verträge werden befristet abgeschlossen – passend zur Dauer Ihres Referendariats. Verlängerung nach Absprache möglich. Mindestmietdauer auf Anfrage.</span></div>
         <div class="note-box"><b>WLAN</b><span>Internet per WLAN auf Anfrage.</span></div>
         <div class="note-box"><b>Miete</b><span>Kaltmiete im Monat: Zimmer 1 340 € · Zimmer 2 300 € · Zimmer 3 390 € · Zimmer 4 430 €. Dazu kommen 75 € Nebenkosten im Monat. Die Kaution beträgt zwei Kaltmieten und kann in drei Monatsraten gezahlt werden.</span></div>
       </div>
 
       <div class="form-card" id="formCard">
-        <form id="anfrage-form" onsubmit="handleSubmit(event)">
+        <form id="anfrage-form" onsubmit="handleSubmit(event)" style="position:relative;">
           <div class="form-title">Anfrage senden</div>
           <div class="form-grid">
             <label class="fld"><span>Vorname *</span><input required type="text" name="vorname"></label>
@@ -533,7 +535,9 @@
           </div>
           <label class="fld wide"><span>Dauer des Referendariats / Mietdauer</span><input type="text" name="dauer" placeholder="z. B. 18 Monate"></label>
           <label class="fld wide"><span>Ihre Nachricht</span><textarea rows="4" name="nachricht"></textarea></label>
+          <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;">
           <button type="submit" class="form-submit">Anfrage jetzt absenden →</button>
+          <p class="form-error" id="formStatus" role="alert" hidden></p>
           <p class="form-fine">* Pflichtfelder. Ihre Daten werden nur zur Bearbeitung Ihrer Anfrage verwendet, siehe <a href="datenschutz.html" style="color:inherit;text-decoration:underline;">Datenschutz</a>.</p>
         </form>
       </div>
@@ -603,9 +607,9 @@
     const allImages = buildGallery();
 
     const floorplans = [
-      { src:B+'sparkasse/EG.jpg', group:'Erdgeschoss (EG)' },
-      { src:B+'sparkasse/DG.jpg', group:'Dachgeschoss (DG)' },
-      { src:B+'sparkasse/KG.jpg', group:'Kellergeschoss' }
+      { src:B+'grundrisse/grundriss-eg.svg', group:'Erdgeschoss mit Zimmer 1 und 2' },
+      { src:B+'grundrisse/grundriss-dg.svg', group:'Dachgeschoss mit Zimmer 3 und 4' },
+      { src:B+'grundrisse/grundriss-kg.svg', group:'Kellergeschoss' }
     ];
 
     const schools = [
@@ -798,44 +802,79 @@
       if(a) track('klick-telefon', 'Telefonnummer angetippt');
     });
 
-    // ── KONTAKTFORMULAR → MAILTO ─────────────────────────────────────
-    function handleSubmit(e){
-      e.preventDefault();
-      track('anfrage-formular', 'Anfrageformular abgeschickt');
-      const f = e.target;
-      const vorname   = f.vorname.value.trim();
-      const nachname  = f.nachname.value.trim();
-      const email     = f.email.value.trim();
-      const telefon   = f.telefon.value.trim();
-      const zimmer    = f.zimmer.options[f.zimmer.selectedIndex].text;
-      const einzug    = f.einzug.value || 'noch offen';
-      const dauer     = f.dauer.value.trim() || 'noch offen';
-      const nachricht = f.nachricht.value.trim();
+    // ── KONTAKTFORMULAR ──────────────────────────────────────────────
+    // Mit Web3Forms-Schlüssel geht die Anfrage direkt per Mail an Manfred.
+    // Ohne Schlüssel wird wie bisher eine Mail im Mailprogramm des Besuchers vorbereitet.
+    const W3F_KEY = '';
+    const PHONE_HTML = '<a href="tel:+491728209350" class="cta-sm" style="font-size:16px;">0172 820 93 50</a>';
 
-      const subject = encodeURIComponent('Zimmeranfrage Referendariat – ' + vorname + ' ' + nachname);
-      const body = encodeURIComponent(
-        'Guten Tag Herr Süß,\n\n' +
-        'ich interessiere mich für ein Zimmer in der Kupferhammerstraße 60.\n\n' +
-        'Name: ' + vorname + ' ' + nachname + '\n' +
-        'E-Mail: ' + email + '\n' +
-        'Telefon: ' + (telefon || '–') + '\n' +
-        'Gewünschtes Zimmer: ' + zimmer + '\n' +
-        'Gewünschter Einzug: ' + einzug + '\n' +
-        'Mietdauer: ' + dauer + '\n\n' +
-        'Nachricht:\n' + (nachricht || '–') + '\n\n' +
-        'Mit freundlichen Grüßen\n' + vorname + ' ' + nachname
-      );
-
-      const toEmail = 'ManfredSuess@gmx.de';
-      window.location.href = 'mailto:' + toEmail + '?subject=' + subject + '&body=' + body;
-
+    function formData(f){
+      return {
+        vorname: f.vorname.value.trim(), nachname: f.nachname.value.trim(),
+        email: f.email.value.trim(), telefon: f.telefon.value.trim(),
+        zimmer: f.zimmer.options[f.zimmer.selectedIndex].text,
+        einzug: f.einzug.value || 'noch offen', dauer: f.dauer.value.trim() || 'noch offen',
+        nachricht: f.nachricht.value.trim()
+      };
+    }
+    function mailText(d){
+      return 'Name: ' + d.vorname + ' ' + d.nachname + '\n' +
+        'E-Mail: ' + d.email + '\n' +
+        'Telefon: ' + (d.telefon || '–') + '\n' +
+        'Gewünschtes Zimmer: ' + d.zimmer + '\n' +
+        'Gewünschter Einzug: ' + d.einzug + '\n' +
+        'Mietdauer: ' + d.dauer + '\n\n' +
+        'Nachricht:\n' + (d.nachricht || '–');
+    }
+    function showThanks(title, text){
       document.getElementById('formCard').innerHTML =
-        '<div class="thanks">'+
+        '<div class="thanks" role="status">'+
           '<div class="check"><span></span></div>'+
-          '<h3>Vielen Dank!</h3>'+
-          '<p>Ihre Anfrage wurde in Ihrem E-Mail-Programm vorbereitet – bitte senden Sie die Nachricht ab. Für eine schnelle Rückmeldung erreichen Sie uns auch direkt telefonisch.</p>'+
-          '<a href="tel:+491728209350" class="cta-sm" style="font-size:16px;">0172 820 93 50</a>'+
+          '<h3>'+esc(title)+'</h3>'+
+          '<p>'+esc(text)+'</p>'+ PHONE_HTML +
         '</div>';
+    }
+    function setStatus(msg){
+      const el = document.getElementById('formStatus');
+      el.textContent = msg; el.hidden = !msg;
+    }
+
+    async function handleSubmit(e){
+      e.preventDefault();
+      const f = e.target;
+      if(f.botcheck && f.botcheck.checked) return;
+      const d = formData(f);
+      const subject = 'Zimmeranfrage Referendariat – ' + d.vorname + ' ' + d.nachname;
+
+      if(!W3F_KEY){
+        track('anfrage-formular', 'Anfrageformular abgeschickt');
+        const body = 'Guten Tag Herr Süß,\n\nich interessiere mich für ein Zimmer in der Kupferhammerstraße 60.\n\n' + mailText(d) + '\n\nMit freundlichen Grüßen\n' + d.vorname + ' ' + d.nachname;
+        window.location.href = 'mailto:ManfredSuess@gmx.de?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+        showThanks('Fast geschafft', 'Ihr E-Mail-Programm sollte sich mit der fertigen Anfrage geöffnet haben. Bitte schicken Sie die Mail dort ab. Hat sich nichts geöffnet, rufen Sie uns gern direkt an.');
+        return;
+      }
+
+      const btn = f.querySelector('.form-submit');
+      btn.disabled = true; btn.textContent = 'Wird gesendet …'; setStatus('');
+      try{
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json', 'Accept':'application/json' },
+          body: JSON.stringify({
+            access_key: W3F_KEY, subject: subject, from_name: 'Website Kupferhammerstraße 60',
+            replyto: d.email, name: d.vorname + ' ' + d.nachname, email: d.email,
+            telefon: d.telefon || '–', zimmer: d.zimmer, einzug: d.einzug, mietdauer: d.dauer,
+            nachricht: d.nachricht || '–'
+          })
+        });
+        const out = await res.json().catch(() => ({}));
+        if(!res.ok || !out.success) throw new Error(out.message || ('HTTP ' + res.status));
+        track('anfrage-formular', 'Anfrageformular abgeschickt');
+        showThanks('Vielen Dank!', 'Ihre Anfrage ist angekommen. Wir melden uns so schnell wie möglich bei Ihnen, meist innerhalb von ein bis zwei Tagen.');
+      }catch(err){
+        btn.disabled = false; btn.textContent = 'Anfrage jetzt absenden →';
+        setStatus('Die Anfrage konnte gerade nicht gesendet werden. Bitte versuchen Sie es noch einmal oder rufen Sie uns an: 0172 820 93 50.');
+      }
     }
   </script>
   <script data-goatcounter="https://mak-psue.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
