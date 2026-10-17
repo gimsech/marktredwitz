@@ -1,0 +1,26 @@
+/* Gemeinsamer Stil für Impressum und Datenschutz, passend zur Startseite */
+:root{
+  --bg:#f6f1e9; --surface:#fffdf8; --ink:#292621; --ink-soft:#544c42; --muted:#6a6258;
+  --accent:#3a5b7e; --border:rgba(41,38,33,0.10);
+  --serif:'Newsreader',Georgia,serif; --sans:'Hanken Grotesk',system-ui,-apple-system,sans-serif;
+}
+*{ box-sizing:border-box; }
+body{ margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+a{ color:var(--accent); }
+:focus-visible{ outline:3px solid var(--accent); outline-offset:3px; }
+.top{ display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px clamp(16px,5vw,56px); border-bottom:1px solid var(--border); }
+.brand{ display:flex; align-items:center; gap:11px; color:var(--ink); text-decoration:none; }
+.brand .mark{ display:grid; place-items:center; width:34px; height:34px; border-radius:9px; background:var(--accent); color:#fff; font-family:var(--serif); font-size:18px; }
+.brand b{ font-weight:600; font-size:15px; }
+.back{ font-size:14.5px; font-weight:600; text-decoration:none; }
+main{ max-width:46em; margin:0 auto; padding:48px clamp(16px,5vw,32px) 80px; }
+h1{ font-family:var(--serif); font-weight:500; font-size:clamp(32px,5vw,44px); line-height:1.1; letter-spacing:-0.02em; margin:0 0 8px; }
+.stand{ color:var(--muted); font-size:14px; margin:0 0 36px; }
+h2{ font-family:var(--serif); font-weight:500; font-size:24px; line-height:1.2; margin:40px 0 10px; }
+h3{ font-size:16px; font-weight:600; margin:24px 0 6px; }
+p, ul{ margin:0 0 14px; color:var(--ink-soft); }
+ul{ padding-left:20px; }
+li{ margin-bottom:6px; }
+.card{ background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:18px 22px; margin:0 0 14px; }
+.card p{ margin:0; color:var(--ink); }
+footer{ border-top:1px solid var(--border); padding:24px clamp(16px,5vw,56px); font-size:14px; color:var(--muted); display:flex; flex-wrap:wrap; gap:8px 20px; }

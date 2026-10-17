@@ -129,6 +129,8 @@
     .room-cover img{ width:100%; height:100%; object-fit:cover; transition:transform .4s ease; }
     .room-cover:hover img{ transform:scale(1.05); }
     .room-cover .tagimg{ position:absolute; top:12px; left:12px; padding:5px 11px; border-radius:999px; background:rgba(20,26,32,0.6); backdrop-filter:blur(6px); color:#fff; font-size:12px; font-weight:600; }
+    .room-cover .tagfree{ position:absolute; bottom:12px; left:12px; display:inline-flex; align-items:center; gap:6px; padding:5px 11px; border-radius:999px; background:rgba(255,253,248,0.94); color:#3e6b3a; font-size:12px; font-weight:600; }
+    .room-cover .tagfree::before{ content:""; width:7px; height:7px; border-radius:50%; background:#5e8c5a; }
     .room-cover .tagfloor{ position:absolute; top:12px; right:12px; padding:5px 11px; border-radius:999px; background:rgba(255,253,248,0.92); color:var(--accent); font-size:12px; font-weight:600; }
     .room-body{ padding:22px 22px 24px; display:flex; flex-direction:column; flex:1; }
     .room-title{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:6px; }
@@ -160,9 +162,9 @@
     .video-play{ position:absolute; inset:0; width:100%; height:100%; padding:0; border:0; cursor:pointer; background:#1a2128; }
     .video-play img{ width:100%; height:100%; object-fit:cover; opacity:0.82; }
     .play-ring{ position:absolute; inset:0; display:grid; place-items:center; }
-    .play-ring span{ display:grid; place-items:center; width:78px; height:78px; border-radius:50%; background:rgba(58,91,126,0.94); box-shadow:0 12px 30px rgba(0,0,0,0.4); transition:transform .2s ease; }
-    .video-play:hover .play-ring span{ transform:scale(1.07); }
-    .play-tri{ display:block; width:0; height:0; border-left:22px solid #fff; border-top:14px solid transparent; border-bottom:14px solid transparent; margin-left:6px; }
+    .play-ring > span{ display:grid; place-items:center; width:78px; height:78px; border-radius:50%; background:rgba(58,91,126,0.94); box-shadow:0 12px 30px rgba(0,0,0,0.4); transition:transform .2s ease; }
+    .video-play:hover .play-ring > span{ transform:scale(1.07); }
+    .play-ring svg{ display:block; width:34px; height:34px; margin-left:5px; }
 
     /* ── GRUNDRISSE ── */
     .fp-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px; }
@@ -319,7 +321,7 @@
   <section id="hero" class="hero">
     <div class="hero-copy">
       <div class="badges">
-        <span class="badge"><span class="dot"></span>Verfügbar ab sofort</span>
+        <span class="badge"><span class="dot"></span>Alle 4 Zimmer frei ab sofort</span>
         <span class="badge alt">Befristete Mietverträge</span>
       </div>
       <h1>Ihr Zuhause auf Zeit in <em>Marktredwitz</em></h1>
@@ -365,6 +367,7 @@
       <div class="feat"><div class="num">05</div><h3>Stellplatz &amp; Garage</h3><p>Zwei Garagen mit elektrischem Torantrieb sowie ausreichend Stellplätze.</p></div>
       <div class="feat"><div class="num">06</div><h3>Befristeter Mietvertrag</h3><p>Alle Verträge werden befristet abgeschlossen – perfekt für die Dauer des Referendariats.</p></div>
       <div class="feat"><div class="num">07</div><h3>Waschmaschine &amp; Trockner</h3><p>Waschmaschine und Trockner stehen allen Mieter:innen gemeinschaftlich zur Verfügung.</p></div>
+      <div class="feat"><div class="num">08</div><h3>WLAN</h3><p>Internet per WLAN auf Anfrage – sprechen Sie uns einfach an.</p></div>
     </div>
   </section>
 
@@ -428,7 +431,7 @@
     <div class="video-frame" id="videoFrame">
       <button class="video-play" id="videoPlay" aria-label="Video abspielen">
         <img src="_images/video-vorschau.jpg" alt="Vorschau des Video-Rundgangs" loading="lazy">
-        <span class="play-ring"><span><span class="play-tri"></span></span></span>
+        <span class="play-ring"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z" fill="#fff"/></svg></span></span>
       </button>
     </div>
     <p class="video-note">Das Video liegt bei YouTube. Erst beim Klick auf „Abspielen“ wird es von dort geladen.</p>
@@ -505,6 +508,7 @@
           <div class="note">Erreichbar Mo–Fr, gerne auch abends nach Vereinbarung.</div>
         </div>
         <div class="note-box"><b>Befristeter Mietvertrag</b><span>Alle Verträge werden befristet abgeschlossen – passend zur Dauer Ihres Referendariats. Verlängerung nach Absprache möglich.</span></div>
+        <div class="note-box"><b>WLAN</b><span>Internet per WLAN auf Anfrage.</span></div>
         <div class="note-box"><b>Miete</b><span>Kaltmiete im Monat: Zimmer 1 340 € · Zimmer 2 300 € · Zimmer 3 390 € · Zimmer 4 430 €. Dazu kommen 75 € Nebenkosten im Monat. Die Kaution beträgt zwei Kaltmieten und kann in drei Monatsraten gezahlt werden.</span></div>
       </div>
 
@@ -530,7 +534,7 @@
           <label class="fld wide"><span>Dauer des Referendariats / Mietdauer</span><input type="text" name="dauer" placeholder="z. B. 18 Monate"></label>
           <label class="fld wide"><span>Ihre Nachricht</span><textarea rows="4" name="nachricht"></textarea></label>
           <button type="submit" class="form-submit">Anfrage jetzt absenden →</button>
-          <p class="form-fine">* Pflichtfelder. Ihre Daten werden nur zur Bearbeitung Ihrer Anfrage verwendet.</p>
+          <p class="form-fine">* Pflichtfelder. Ihre Daten werden nur zur Bearbeitung Ihrer Anfrage verwendet, siehe <a href="datenschutz.html" style="color:inherit;text-decoration:underline;">Datenschutz</a>.</p>
         </form>
       </div>
     </div>
@@ -542,7 +546,7 @@
       <div style="max-width:30em;">
         <div class="fbrand"><span class="mark">M</span><b>Wohnraum für Referendar:innen</b></div>
         <p>Kupferhammerstraße 60, 95615 Marktredwitz · Kontakt: <a href="tel:+491728209350" class="uline">0172 820 93 50</a> (Manfred Süß)</p>
-        <p class="fine">Alle Mietverträge sind befristet. Irrtümer vorbehalten.</p>
+        <p class="fine">Alle Mietverträge sind befristet. Irrtümer vorbehalten. · <a href="impressum.html" class="uline">Impressum</a> · <a href="datenschutz.html" class="uline">Datenschutz</a></p>
       </div>
       <a href="#kontakt" class="fcta">Jetzt anfragen →</a>
     </div>
@@ -645,6 +649,7 @@
           '<img src="'+TH(imgs[0].src)+'" alt="'+esc(r.title)+'" loading="lazy" decoding="async">'+
           '<span class="tagimg">'+imgs.length+' Fotos</span>'+
           '<span class="tagfloor">'+esc(r.floor)+'</span>'+
+          '<span class="tagfree">Frei ab sofort</span>'+
         '</button>'+
         '<div class="room-body">'+
           '<div class="room-title"><h3>'+esc(r.title)+' · '+esc(r.floor)+'</h3><span>'+esc(r.size)+'</span></div>'+
