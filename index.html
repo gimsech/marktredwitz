@@ -133,6 +133,7 @@
     .chip{ padding:5px 11px; border-radius:8px; background:var(--surface-3); border:1px solid rgba(58,91,126,0.14); font-size:12.5px; font-weight:500; color:var(--accent); }
     .room-foot{ margin-top:auto; display:flex; align-items:center; justify-content:space-between; gap:12px; padding-top:16px; border-top:1px solid var(--border); }
     .room-foot b{ font-weight:600; font-size:14.5px; }
+    .room-foot .nk{ display:block; font-size:12.5px; color:var(--muted); margin-top:2px; }
     .room-foot a{ font-size:14px; font-weight:600; color:var(--accent); }
     .room-foot a:hover{ color:var(--accent-dark); }
 
@@ -388,7 +389,7 @@
   <section id="zimmer" class="pad">
     <div class="head-block" style="max-width:40em;">
       <div class="eyebrow">Mietangebot</div>
-      <h2 class="h" style="margin-bottom:16px;">Vier Zimmer – Miete auf Anfrage</h2>
+      <h2 class="h" style="margin-bottom:16px;">Vier Zimmer ab 300 € Kaltmiete</h2>
       <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0;">Jedes Zimmer ist einzeln mietbar, vollständig möbliert und abschließbar. Gemeinschaftsräume – Küche, Wohnzimmer und Garten – werden geteilt. Alle Verträge sind befristet.</p>
     </div>
     <div class="room-grid" id="roomGrid"></div>
@@ -493,7 +494,7 @@
           <div class="note">Erreichbar Mo–Fr, gerne auch abends nach Vereinbarung.</div>
         </div>
         <div class="note-box"><b>Befristeter Mietvertrag</b><span>Alle Verträge werden befristet abgeschlossen – passend zur Dauer Ihres Referendariats. Verlängerung nach Absprache möglich.</span></div>
-        <div class="note-box"><b>Miete</b><span>Die Miethöhe wird individuell vereinbart und richtet sich nach Zimmer und Mietdauer.</span></div>
+        <div class="note-box"><b>Miete</b><span>Kaltmiete im Monat: Zimmer 1 340 € · Zimmer 2 300 € · Zimmer 3 390 € · Zimmer 4 430 €. Dazu kommen 75 € Nebenkosten im Monat und eine Kaution.</span></div>
       </div>
 
       <div class="form-card" id="formCard">
@@ -507,10 +508,10 @@
             <label class="fld"><span>Gewünschtes Zimmer</span>
               <select name="zimmer">
                 <option>Egal / noch offen</option>
-                <option>Zimmer 1 – Erdgeschoss</option>
-                <option>Zimmer 2 – Erdgeschoss</option>
-                <option>Zimmer 3 – Dachgeschoss</option>
-                <option>Zimmer 4 – Dachgeschoss</option>
+                <option>Zimmer 1 – Erdgeschoss (12 m², 340 € kalt)</option>
+                <option>Zimmer 2 – Erdgeschoss (10,36 m², 300 € kalt)</option>
+                <option>Zimmer 3 – Dachgeschoss (14,28 m², 390 € kalt)</option>
+                <option>Zimmer 4 – Dachgeschoss (14 m², 430 € kalt)</option>
               </select>
             </label>
             <label class="fld"><span>Gewünschter Einzug</span><input type="month" name="einzug"></label>
@@ -530,7 +531,7 @@
       <div style="max-width:30em;">
         <div class="fbrand"><span class="mark">M</span><b>Wohnraum für Referendar:innen</b></div>
         <p>Kupferhammerstraße 60, 95615 Marktredwitz · Kontakt: <a href="tel:+491728209350" class="uline">0172 820 93 50</a> (Manfred Süß)</p>
-        <p class="fine">Alle Mietverträge sind befristet. Miete auf Anfrage. Irrtümer vorbehalten.</p>
+        <p class="fine">Alle Mietverträge sind befristet. Irrtümer vorbehalten.</p>
       </div>
       <a href="#kontakt" class="fcta">Jetzt anfragen →</a>
     </div>
@@ -550,16 +551,16 @@
 
     // ── DATEN ────────────────────────────────────────────────────────
     const rooms = [
-      { title:'Zimmer 1', floor:'Erdgeschoss', size:'Größe auf Anfrage', tags:['Abschließbar'],
+      { title:'Zimmer 1', floor:'Erdgeschoss', size:'12 m² · 3,60 × 3,35 m', rent:'340 €', tags:['Abschließbar'],
         desc:'Helles Zimmer im Erdgeschoss, vollständig möbliert, mit direktem Zugang zu Küche und Wohnzimmer.',
         folder:'EG/Schlafzimmer', names:['001.JPG','002.JPG'] },
-      { title:'Zimmer 2', floor:'Erdgeschoss', size:'10,54 m²', tags:['Abschließbar','Gartenblick'],
+      { title:'Zimmer 2', floor:'Erdgeschoss', size:'10,36 m² · 4,43 × 2,34 m', rent:'300 €', tags:['Abschließbar','Gartenblick'],
         desc:'Ruhiges, kompaktes Zimmer mit Blick in den Garten, vollständig möbliert.',
         folder:'EG/KleinesZimmer', names:['001.JPG','002.JPG','003.JPG','004.JPG','005.JPG'] },
-      { title:'Zimmer 3', floor:'Dachgeschoss', size:'Größe auf Anfrage', tags:['Bett','Schreibtisch','Kleiderschrank','Kleines Sofa','Abschließbar'],
+      { title:'Zimmer 3', floor:'Dachgeschoss', size:'14,28 m² · 3,98 × 3,59 m', rent:'390 €', tags:['Bett','Schreibtisch','Kleiderschrank','Kleines Sofa','Abschließbar'],
         desc:'Gemütliches Dachgeschoss-Zimmer mit Schreibtisch, Bett, Kleiderschrank und kleinem Sofa – ruhig und behaglich.',
         folder:'1OG/Zimmer', names:['001.JPG','002.JPG','003.JPG'] },
-      { title:'Zimmer 4', floor:'Dachgeschoss', size:'Größe auf Anfrage', tags:['Ankleidezimmer','Höhenverstellbarer Schreibtisch','Bett','Kleiderschrank','Kleines Sofa','Abschließbar'],
+      { title:'Zimmer 4', floor:'Dachgeschoss', size:'14 m² · 3,69 × 3,89 m', rent:'430 €', tags:['Ankleidezimmer','Höhenverstellbarer Schreibtisch','Bett','Kleiderschrank','Kleines Sofa','Abschließbar'],
         desc:'Geräumiges Dachzimmer mit eigenem Ankleidezimmer, höhenverstellbarem Schreibtisch, Bett, Kleiderschrank und kleinem Sofa.',
         folder:'1OG/Zimmer2', names:['001.JPG','002.JPG','003.JPG','004.JPG','005.JPG','006.JPG'] }
     ];
@@ -636,7 +637,7 @@
           '<div class="room-title"><h3>'+esc(r.title)+' · '+esc(r.floor)+'</h3><span>'+esc(r.size)+'</span></div>'+
           '<p>'+esc(r.desc)+'</p>'+
           '<div class="chips">'+r.tags.map(t=>'<span class="chip">'+esc(t)+'</span>').join('')+'</div>'+
-          '<div class="room-foot"><b>Miete auf Anfrage</b><a href="#kontakt">Anfragen →</a></div>'+
+          '<div class="room-foot"><span><b>'+esc(r.rent)+' kalt</b><small class="nk">+ 75 € Nebenkosten im Monat</small></span><a href="#kontakt">Anfragen →</a></div>'+
         '</div>';
       card.querySelector('.room-cover').addEventListener('click', () => openLb(imgs, 0));
       roomGrid.appendChild(card);
