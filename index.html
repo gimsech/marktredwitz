@@ -803,9 +803,9 @@
     });
 
     // ── KONTAKTFORMULAR ──────────────────────────────────────────────
-    // Mit Web3Forms-Schlüssel geht die Anfrage direkt per Mail an Manfred.
-    // Ohne Schlüssel wird wie bisher eine Mail im Mailprogramm des Besuchers vorbereitet.
-    const W3F_KEY = '';
+    // Anfragen gehen über Web3Forms direkt per Mail an Manfred.
+    // Der Schlüssel ist öffentlich gedacht und darf im Quelltext stehen.
+    const W3F_KEY = '1d3ec172-4906-4161-b827-ec798d3d082d';
     const PHONE_HTML = '<a href="tel:+491728209350" class="cta-sm" style="font-size:16px;">0172 820 93 50</a>';
 
     function formData(f){
@@ -846,13 +846,6 @@
       const d = formData(f);
       const subject = 'Zimmeranfrage Referendariat – ' + d.vorname + ' ' + d.nachname;
 
-      if(!W3F_KEY){
-        track('anfrage-formular', 'Anfrageformular abgeschickt');
-        const body = 'Guten Tag Herr Süß,\n\nich interessiere mich für ein Zimmer in der Kupferhammerstraße 60.\n\n' + mailText(d) + '\n\nMit freundlichen Grüßen\n' + d.vorname + ' ' + d.nachname;
-        window.location.href = 'mailto:ManfredSuess@gmx.de?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-        showThanks('Fast geschafft', 'Ihr E-Mail-Programm sollte sich mit der fertigen Anfrage geöffnet haben. Bitte schicken Sie die Mail dort ab. Hat sich nichts geöffnet, rufen Sie uns gern direkt an.');
-        return;
-      }
 
       const btn = f.querySelector('.form-submit');
       btn.disabled = true; btn.textContent = 'Wird gesendet …'; setStatus('');
