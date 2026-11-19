@@ -1,0 +1,33 @@
+/* Gemeinsame Gestaltungswerte für alle Seiten (Startseite, Impressum, Datenschutz). */
+:root{
+  /* Flächen */
+  --bg:#f6f1e9; --bg-rgb:246 241 233;
+  --surface:#fffdf8; --surface-2:#efe9df; --surface-3:#eef2ee;
+  --field:#fff;            /* Eingabefelder und Grundriss-Hintergrund */
+  --photo-bg:#e6ddcd;      /* Platzhalter, solange ein Foto lädt */
+  --night:#1f2730;         /* Fußzeile, Video-Hintergrund */
+  --scrim:rgb(18 22 27 / 0.92);
+
+  /* Text */
+  --ink:#292621; --ink-rgb:41 38 33;
+  --ink-soft:#544c42;
+  --muted:#6a6258;
+  --muted-2:#73695d;       /* mind. 5,2:1 auf --surface */
+
+  /* Akzent und Status */
+  --accent:#3a5b7e; --accent-rgb:58 91 126; --accent-dark:#2b4663;
+  --ok:#5e8c5a; --ok-ink:#3e6b3a;
+  --danger-bg:#f7e3e0; --danger-ink:#8c2a20;
+
+  /* Linien */
+  --border:rgb(var(--ink-rgb) / 0.10);
+  --rule:rgb(var(--ink-rgb) / 0.07);
+
+  /* Schrift */
+  --serif:'Newsreader',Georgia,serif;
+  --sans:'Hanken Grotesk',system-ui,-apple-system,sans-serif;
+}
+
+::selection{ background:var(--accent); color:#fff; }
+:focus-visible{ outline:3px solid var(--accent); outline-offset:3px; }
+html{ caret-color:var(--accent); accent-color:var(--accent); }
