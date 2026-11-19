@@ -323,7 +323,7 @@
   <section id="hero" class="hero">
     <div class="hero-copy">
       <div class="badges">
-        <span class="badge"><span class="dot"></span>Alle 4 Zimmer frei ab sofort</span>
+        <span class="badge"><span class="dot"></span>3 Zimmer frei ab sofort, Zimmer 3 ab 3. Februar</span>
         <span class="badge alt">Befristete Mietverträge</span>
       </div>
       <h1>Ihr Zuhause auf Zeit in <em>Marktredwitz</em></h1>
@@ -578,7 +578,7 @@
         folder:'EG/KleinesZimmer', names:['001.JPG','002.JPG','003.JPG','004.JPG','005.JPG'] },
       { title:'Zimmer 3', floor:'Dachgeschoss', size:'14,28 m² · 3,98 × 3,59 m', rent:'390 €', deposit:'780 €', tags:['Bett','Schreibtisch','Kleiderschrank','Kleines Sofa','Abschließbar'],
         desc:'Gemütliches Dachgeschoss-Zimmer mit Schreibtisch, Bett, Kleiderschrank und kleinem Sofa – ruhig und behaglich.',
-        folder:'1OG/Zimmer', names:['001.JPG','002.JPG','003.JPG'] },
+        folder:'1OG/Zimmer', names:['001.JPG','002.JPG','003.JPG'], free:'Frei ab 3. Februar' },
       { title:'Zimmer 4', floor:'Dachgeschoss', size:'14 m² · 3,69 × 3,89 m', rent:'430 €', deposit:'860 €', tags:['Ankleidezimmer','Höhenverstellbarer Schreibtisch','Bett','Kleiderschrank','Kleines Sofa','Abschließbar'],
         desc:'Geräumiges Dachzimmer mit eigenem Ankleidezimmer, höhenverstellbarem Schreibtisch, Bett, Kleiderschrank und kleinem Sofa.',
         folder:'1OG/Zimmer2', names:['001.JPG','002.JPG','003.JPG','004.JPG','005.JPG','006.JPG'] }
@@ -653,7 +653,7 @@
           '<img src="'+TH(imgs[0].src)+'" alt="'+esc(r.title)+'" loading="lazy" decoding="async">'+
           '<span class="tagimg">'+imgs.length+' Fotos</span>'+
           '<span class="tagfloor">'+esc(r.floor)+'</span>'+
-          '<span class="tagfree">Frei ab sofort</span>'+
+          '<span class="tagfree">'+esc(r.free || 'Frei ab sofort')+'</span>'+
         '</button>'+
         '<div class="room-body">'+
           '<div class="room-title"><h3>'+esc(r.title)+' · '+esc(r.floor)+'</h3><span>'+esc(r.size)+'</span></div>'+
