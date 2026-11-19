@@ -14,22 +14,17 @@
   <meta property="og:description" content="4 möblierte Einzelzimmer ab 300 € kalt im Haus mit Garten, Kupferhammerstraße 60. Befristete Mietverträge.">
   <meta property="og:image" content="https://zimmer.psue.de/_images/Haus/001.jpg">
   <link rel="stylesheet" href="fonts/fonts.css">
+  <link rel="stylesheet" href="tokens.css">
   <style>
-    :root{
-      --bg:#f6f1e9; --surface:#fffdf8; --surface-2:#efe9df; --surface-3:#eef2ee;
-      --ink:#292621; --ink-soft:#544c42; --muted:#6a6258; --muted-2:#94897a;
-      --accent:#3a5b7e; --accent-dark:#2b4663; --border:rgba(41,38,33,0.10);
-      --serif:'Newsreader',Georgia,serif; --sans:'Hanken Grotesk',system-ui,-apple-system,sans-serif;
-      --maxw:1280px; --pad:clamp(20px,5vw,56px); --sec:clamp(56px,9vh,104px);
-    }
+    :root{ --maxw:1280px; --pad:clamp(20px,5vw,56px); --sec:clamp(56px,9vh,104px); }
     *{ box-sizing:border-box; }
     html{ scroll-behavior:smooth; scroll-padding-top:84px; }
     body{ margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); -webkit-font-smoothing:antialiased; }
-    img{ display:block; max-width:100%; }
+    img{ display:block; max-width:100%; height:auto; }
     a{ color:inherit; text-decoration:none; }
     button{ font-family:inherit; }
-    ::selection{ background:var(--accent); color:#fff; }
-    :focus-visible{ outline:3px solid var(--accent); outline-offset:3px; }
+    p{ text-wrap:pretty; }
+    h1,h2,h3{ text-wrap:balance; }
 
     @keyframes kb{ from{ transform:scale(1.08); } to{ transform:scale(1); } }
     @keyframes fadeUp{ from{ opacity:0; transform:translateY(18px); } to{ opacity:1; transform:translateY(0); } }
@@ -38,11 +33,14 @@
 
     .wrap{ max-width:var(--maxw); margin:0 auto; }
     .eyebrow{ font-size:12.5px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:14px; }
-    h2.h{ font-family:var(--serif); font-weight:500; font-size:clamp(28px,3.6vw,46px); line-height:1.08; letter-spacing:-0.02em; margin:0; }
+    h2.h{ font-family:var(--serif); font-weight:500; font-size:clamp(28px,3.6vw,46px); line-height:1.08; letter-spacing:-0.02em; margin:0 0 18px; }
+    h2.h:last-child{ margin-bottom:0; }
+    .sub{ font-size:16px; line-height:1.6; color:var(--muted); margin:0; }
 
     /* ── NAV ── */
-    .nav{ position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between; gap:24px;
-      padding:14px var(--pad); background:rgba(246,241,233,0.82); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    .site-head{ position:sticky; top:0; z-index:50; }
+    .nav{ display:flex; align-items:center; justify-content:space-between; gap:24px;
+      padding:14px var(--pad); background:rgb(var(--bg-rgb) / 0.82); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
       border-bottom:1px solid var(--border); }
     .brand{ display:flex; align-items:center; gap:11px; }
     .brand .mark{ display:grid; place-items:center; width:34px; height:34px; border-radius:9px; background:var(--accent); color:#fff; font-family:var(--serif); font-size:18px; line-height:1; }
@@ -53,60 +51,68 @@
     .nav-links{ display:flex; gap:26px; font-size:14.5px; font-weight:500; color:var(--ink-soft); }
     .nav-links a{ padding:4px 0; transition:color .15s ease; }
     .nav-links a:hover{ color:var(--accent); }
-    .btn-pill{ display:inline-flex; align-items:center; gap:7px; padding:10px 20px; border-radius:999px; background:var(--accent); color:#fff; font-weight:600; font-size:14px; box-shadow:0 6px 18px rgba(58,91,126,0.28); transition:transform .18s ease, box-shadow .18s ease; }
-    .btn-pill:hover{ transform:translateY(-1px); box-shadow:0 10px 26px rgba(58,91,126,0.36); }
+    .btn-pill{ display:inline-flex; align-items:center; gap:7px; padding:10px 20px; border-radius:999px; background:var(--accent); color:#fff; font-weight:600; font-size:14px; box-shadow:0 6px 18px rgb(var(--accent-rgb) / 0.28); transition:transform .18s ease, box-shadow .18s ease; }
+    .btn-pill:hover{ transform:translateY(-1px); box-shadow:0 10px 26px rgb(var(--accent-rgb) / 0.36); }
     .nav-toggle{ display:none; width:42px; height:42px; border:1px solid var(--border); border-radius:11px; background:var(--surface); cursor:pointer; align-items:center; justify-content:center; }
     .nav-toggle span{ position:relative; width:18px; height:2px; background:var(--ink); border-radius:2px; }
     .nav-toggle span::before,.nav-toggle span::after{ content:""; position:absolute; left:0; width:18px; height:2px; background:var(--ink); border-radius:2px; }
+    .nav-toggle span{ transition:background .15s ease; }
+    .nav-toggle span::before,.nav-toggle span::after{ transition:transform .2s cubic-bezier(.2,.7,.2,1), top .2s cubic-bezier(.2,.7,.2,1); }
     .nav-toggle span::before{ top:-6px; } .nav-toggle span::after{ top:6px; }
-    .mobile-menu{ display:none; flex-direction:column; gap:4px; padding:8px var(--pad) 18px; background:rgba(246,241,233,0.97); backdrop-filter:blur(14px); border-bottom:1px solid var(--border); position:sticky; top:67px; z-index:49; }
+    .nav-toggle[aria-expanded="true"] span{ background:transparent; }
+    .nav-toggle[aria-expanded="true"] span::before{ top:0; transform:rotate(45deg); }
+    .nav-toggle[aria-expanded="true"] span::after{ top:0; transform:rotate(-45deg); }
+    .skip{ position:absolute; left:16px; top:-60px; z-index:200; padding:12px 18px; border-radius:10px; background:var(--accent); color:#fff; font-weight:600; font-size:15px; }
+    .skip:focus{ top:12px; }
+    .mobile-menu{ display:none; flex-direction:column; gap:4px; padding:8px var(--pad) 18px; background:rgb(var(--bg-rgb) / 0.97); backdrop-filter:blur(14px); border-bottom:1px solid var(--border); }
     .mobile-menu.open{ display:flex; }
     .mobile-menu a{ padding:12px 4px; font-size:16px; font-weight:500; color:var(--ink-soft); border-bottom:1px solid var(--border); }
 
     /* ── BUTTONS ── */
-    .cta{ display:inline-flex; align-items:center; gap:9px; padding:15px 26px; border-radius:999px; background:var(--accent); color:#fff; font-weight:600; font-size:15.5px; box-shadow:0 10px 26px rgba(58,91,126,0.30); transition:transform .18s ease, box-shadow .18s ease, background .18s ease; }
-    .cta:hover{ transform:translateY(-2px); box-shadow:0 16px 34px rgba(58,91,126,0.4); background:var(--accent-dark); }
-    .cta-ghost{ display:inline-flex; align-items:center; gap:9px; padding:15px 26px; border-radius:999px; background:transparent; border:1px solid rgba(41,38,33,0.22); color:var(--ink); font-weight:600; font-size:15.5px; transition:background .18s ease, border-color .18s ease; }
-    .cta-ghost:hover{ background:var(--surface); border-color:rgba(41,38,33,0.38); }
+    .cta{ display:inline-flex; align-items:center; gap:9px; padding:15px 26px; border-radius:999px; background:var(--accent); color:#fff; font-weight:600; font-size:15.5px; box-shadow:0 10px 26px rgb(var(--accent-rgb) / 0.30); transition:transform .18s ease, box-shadow .18s ease, background .18s ease; }
+    .cta:hover{ transform:translateY(-2px); box-shadow:0 16px 34px rgb(var(--accent-rgb) / 0.4); background:var(--accent-dark); }
+    .cta-ghost{ display:inline-flex; align-items:center; gap:9px; padding:15px 26px; border-radius:999px; background:transparent; border:1px solid rgb(var(--ink-rgb) / 0.22); color:var(--ink); font-weight:600; font-size:15.5px; transition:background .18s ease, border-color .18s ease; }
+    .cta-ghost:hover{ background:var(--surface); border-color:rgb(var(--ink-rgb) / 0.38); }
     .cta-sm{ display:inline-flex; align-items:center; gap:9px; padding:13px 22px; border-radius:999px; background:var(--accent); color:#fff; font-weight:600; font-size:15px; transition:background .18s ease; }
     .cta-sm:hover{ background:var(--accent-dark); }
+    .cta-tel{ font-size:16px; font-variant-numeric:tabular-nums; }
 
     /* ── HERO ── */
     .hero{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:clamp(28px,5vw,72px); align-items:center; max-width:var(--maxw); margin:0 auto; padding:clamp(40px,7vh,84px) var(--pad) clamp(48px,8vh,96px); }
     .hero-copy{ animation:fadeUp .7s ease both; }
     .badges{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:26px; }
-    .badge{ display:inline-flex; align-items:center; gap:7px; padding:7px 14px; border-radius:999px; background:var(--surface-3); border:1px solid rgba(58,91,126,0.16); font-size:13px; font-weight:600; color:var(--accent); }
+    .badge{ display:inline-flex; align-items:center; gap:7px; padding:7px 14px; border-radius:999px; background:var(--surface-3); border:1px solid rgb(var(--accent-rgb) / 0.16); font-size:13px; font-weight:600; color:var(--accent); }
     .badge.alt{ background:var(--surface); border-color:var(--border); color:var(--ink-soft); }
-    .dot{ width:7px; height:7px; border-radius:50%; background:#5e8c5a; }
+    .dot{ width:7px; height:7px; border-radius:50%; background:var(--ok); }
     .hero h1{ font-family:var(--serif); font-weight:500; font-size:clamp(38px,5.6vw,74px); line-height:1.02; letter-spacing:-0.02em; margin:0 0 22px; }
     .hero h1 em{ font-style:italic; color:var(--accent); }
     .hero p.lead{ font-size:clamp(16px,1.5vw,19px); line-height:1.6; color:var(--ink-soft); max-width:30em; margin:0 0 32px; }
     .hero-actions{ display:flex; flex-wrap:wrap; gap:14px; }
     .hero-media{ position:relative; animation:fadeUp .8s .1s ease both; }
-    .hero-media figure{ margin:0; position:relative; aspect-ratio:4/5; border-radius:20px; overflow:hidden; box-shadow:0 30px 60px -24px rgba(41,38,33,0.45); }
+    .hero-media figure{ margin:0; position:relative; aspect-ratio:4/5; border-radius:20px; overflow:hidden; box-shadow:0 30px 60px -24px rgb(var(--ink-rgb) / 0.45); }
     .hero-media img{ width:100%; height:100%; object-fit:cover; animation:kb 6s ease-out both; }
-    .hero-card{ position:absolute; left:-14px; bottom:-18px; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:16px 20px; box-shadow:0 18px 40px -16px rgba(41,38,33,0.4); }
+    .hero-card{ position:absolute; left:-14px; bottom:-18px; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:16px 20px; box-shadow:0 18px 40px -16px rgb(var(--ink-rgb) / 0.4); }
     .hero-card b{ display:block; font-family:var(--serif); font-weight:500; font-size:20px; line-height:1; margin-bottom:6px; }
     .hero-card span{ font-size:13px; color:var(--muted); letter-spacing:0.02em; }
 
     /* ── STATS ── */
     .stats{ border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--surface); }
     .stats-grid{ max-width:var(--maxw); margin:0 auto; display:grid; grid-template-columns:repeat(5,1fr); }
-    .stat{ padding:26px clamp(14px,2vw,28px); text-align:center; border-left:1px solid rgba(41,38,33,0.08); }
+    .stat{ padding:26px clamp(14px,2vw,28px); text-align:center; border-left:1px solid rgb(var(--ink-rgb) / 0.08); }
     .stat:first-child{ border-left:0; }
     .stat .v{ font-family:var(--serif); font-size:clamp(24px,2.6vw,34px); line-height:1; letter-spacing:-0.01em; }
     .stat .l{ font-size:12.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-top:8px; }
 
     /* ── SECTIONS ── */
     section.pad{ max-width:var(--maxw); margin:0 auto; padding:var(--sec) var(--pad); }
-    .tinted{ background:var(--surface-2); border-top:1px solid rgba(41,38,33,0.08); }
+    .tinted{ background:var(--surface-2); border-top:1px solid rgb(var(--ink-rgb) / 0.08); }
     .tinted .inner{ max-width:var(--maxw); margin:0 auto; padding:var(--sec) var(--pad); }
-    .head-block{ max-width:38em; margin-bottom:48px; }
+    .head-block{ max-width:40em; margin-bottom:48px; }
 
     /* ── FEATURES ── */
     .feat-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:18px; }
     .feat{ background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:26px 24px; transition:transform .2s ease, box-shadow .2s ease; }
-    .feat:hover{ transform:translateY(-3px); box-shadow:0 16px 32px -18px rgba(41,38,33,0.35); }
+    .feat:hover{ transform:translateY(-3px); box-shadow:0 16px 32px -18px rgb(var(--ink-rgb) / 0.35); }
     .feat .num{ font-family:var(--serif); font-size:15px; color:var(--accent); margin-bottom:16px; letter-spacing:0.04em; }
     .feat h3{ font-size:18px; font-weight:600; letter-spacing:-0.01em; margin:0 0 9px; }
     .feat p{ font-size:14.5px; line-height:1.55; color:var(--muted); margin:0; }
@@ -115,22 +121,22 @@
     .split{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(32px,5vw,72px); align-items:center; }
     .split p{ font-size:16px; line-height:1.65; color:var(--ink-soft); margin:0 0 14px; }
     .split strong{ font-weight:600; color:var(--ink); }
-    .specs{ display:grid; grid-template-columns:1fr 1fr; gap:10px 22px; margin-top:8px; }
-    .spec{ display:flex; align-items:center; gap:10px; font-size:14.5px; color:#3f3a33; padding:7px 0; border-bottom:1px solid var(--border); }
+    .specs{ display:grid; grid-template-columns:1fr 1fr; gap:10px 22px; margin-top:28px; }
+    .spec{ display:flex; align-items:center; gap:10px; font-size:14.5px; color:var(--ink-soft); padding:7px 0; border-bottom:1px solid var(--border); }
     .spec .pt{ width:5px; height:5px; border-radius:50%; background:var(--accent); flex:none; }
-    .photo{ margin:0; aspect-ratio:5/4; border-radius:18px; overflow:hidden; box-shadow:0 28px 54px -24px rgba(41,38,33,0.45); }
+    .photo{ margin:0; aspect-ratio:5/4; border-radius:18px; overflow:hidden; box-shadow:0 28px 54px -24px rgb(var(--ink-rgb) / 0.45); }
     .photo img{ width:100%; height:100%; object-fit:cover; }
 
     /* ── ZIMMER ── */
     .room-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:22px; }
     .room{ background:var(--surface); border:1px solid var(--border); border-radius:18px; overflow:hidden; display:flex; flex-direction:column; transition:transform .2s ease, box-shadow .2s ease; }
-    .room:hover{ transform:translateY(-3px); box-shadow:0 22px 44px -22px rgba(41,38,33,0.4); }
-    .room-cover{ position:relative; border:0; padding:0; cursor:pointer; display:block; background:#e6ddcd; aspect-ratio:3/2; overflow:hidden; width:100%; }
+    .room:hover{ transform:translateY(-3px); box-shadow:0 22px 44px -22px rgb(var(--ink-rgb) / 0.4); }
+    .room-cover{ position:relative; border:0; padding:0; cursor:pointer; display:block; background:var(--photo-bg); aspect-ratio:3/2; overflow:hidden; width:100%; }
     .room-cover img{ width:100%; height:100%; object-fit:cover; transition:transform .4s ease; }
     .room-cover:hover img{ transform:scale(1.05); }
     .room-cover .tagimg{ position:absolute; top:12px; left:12px; padding:5px 11px; border-radius:999px; background:rgba(20,26,32,0.6); backdrop-filter:blur(6px); color:#fff; font-size:12px; font-weight:600; }
-    .room-cover .tagfree{ position:absolute; bottom:12px; left:12px; display:inline-flex; align-items:center; gap:6px; padding:5px 11px; border-radius:999px; background:rgba(255,253,248,0.94); color:#3e6b3a; font-size:12px; font-weight:600; }
-    .room-cover .tagfree::before{ content:""; width:7px; height:7px; border-radius:50%; background:#5e8c5a; }
+    .room-cover .tagfree{ position:absolute; bottom:12px; left:12px; display:inline-flex; align-items:center; gap:6px; padding:5px 11px; border-radius:999px; background:rgba(255,253,248,0.94); color:var(--ok-ink); font-size:12px; font-weight:600; }
+    .room-cover .tagfree::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--ok); }
     .room-cover .tagfloor{ position:absolute; top:12px; right:12px; padding:5px 11px; border-radius:999px; background:rgba(255,253,248,0.92); color:var(--accent); font-size:12px; font-weight:600; }
     .room-body{ padding:22px 22px 24px; display:flex; flex-direction:column; flex:1; }
     .room-title{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:6px; }
@@ -138,41 +144,43 @@
     .room-title span{ font-size:13px; color:var(--muted); white-space:nowrap; }
     .room-body p{ font-size:14.5px; line-height:1.55; color:var(--muted); margin:0 0 16px; }
     .chips{ display:flex; flex-wrap:wrap; gap:7px; margin-bottom:20px; }
-    .chip{ padding:5px 11px; border-radius:8px; background:var(--surface-3); border:1px solid rgba(58,91,126,0.14); font-size:12.5px; font-weight:500; color:var(--accent); }
+    .chip{ padding:5px 11px; border-radius:8px; background:var(--surface-3); border:1px solid rgb(var(--accent-rgb) / 0.14); font-size:12.5px; font-weight:500; color:var(--accent); }
     .room-foot{ margin-top:auto; display:flex; align-items:center; justify-content:space-between; gap:12px; padding-top:16px; border-top:1px solid var(--border); }
     .room-foot b{ font-weight:600; font-size:14.5px; }
     .room-foot .nk{ display:block; font-size:12.5px; color:var(--muted); margin-top:2px; }
-    .room-foot a{ font-size:14px; font-weight:600; color:var(--accent); }
+    .room-foot a{ padding:10px 0; font-size:14px; font-weight:600; color:var(--accent); }
     .room-foot a:hover{ color:var(--accent-dark); }
 
     /* ── GALERIE ── */
     .gal-head{ display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:20px; margin-bottom:30px; }
+    .gal-note{ font-size:14.5px; line-height:1.55; color:var(--muted); max-width:24em; margin:0; }
     .filters{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:26px; }
     .filter{ padding:9px 16px; border-radius:999px; cursor:pointer; font-size:13.5px; font-weight:600; transition:all .15s ease; border:1px solid var(--border); background:var(--surface); color:var(--ink-soft); }
     .filter.active{ border-color:var(--accent); background:var(--accent); color:#fff; }
     .masonry{ columns:3 280px; column-gap:14px; }
-    .masonry button{ display:block; width:100%; margin:0 0 14px; padding:0; border:0; border-radius:12px; overflow:hidden; cursor:pointer; background:#e6ddcd; break-inside:avoid; position:relative; }
+    .masonry button{ display:block; width:100%; margin:0 0 14px; padding:0; border:0; border-radius:12px; overflow:hidden; cursor:pointer; background:var(--photo-bg); break-inside:avoid; position:relative; }
     .masonry img{ width:100%; display:block; transition:transform .4s ease; }
     .masonry button:hover img{ transform:scale(1.04); }
 
     /* ── VIDEO ── */
     .video-wrap{ max-width:1100px; margin:0 auto; padding:var(--sec) var(--pad); text-align:center; }
-    .video-frame{ position:relative; aspect-ratio:16/9; border-radius:18px; overflow:hidden; box-shadow:0 30px 60px -26px rgba(41,38,33,0.5); }
+    .video-wrap .sub{ max-width:32em; margin:0 auto 34px; }
+    .video-frame{ position:relative; aspect-ratio:16/9; border-radius:18px; overflow:hidden; box-shadow:0 30px 60px -26px rgb(var(--ink-rgb) / 0.5); }
     .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
-    .video-play{ position:absolute; inset:0; width:100%; height:100%; padding:0; border:0; cursor:pointer; background:#1a2128; }
+    .video-play{ position:absolute; inset:0; width:100%; height:100%; padding:0; border:0; cursor:pointer; background:var(--night); }
     .video-play img{ width:100%; height:100%; object-fit:cover; opacity:0.82; }
     .play-ring{ position:absolute; inset:0; display:grid; place-items:center; }
-    .play-ring > span{ display:grid; place-items:center; width:78px; height:78px; border-radius:50%; background:rgba(58,91,126,0.94); box-shadow:0 12px 30px rgba(0,0,0,0.4); transition:transform .2s ease; }
+    .play-ring > span{ display:grid; place-items:center; width:78px; height:78px; border-radius:50%; background:rgb(var(--accent-rgb) / 0.94); box-shadow:0 12px 30px rgba(0,0,0,0.4); transition:transform .2s ease; }
     .video-play:hover .play-ring > span{ transform:scale(1.07); }
     .play-ring svg{ display:block; width:34px; height:34px; margin-left:5px; }
 
     /* ── GRUNDRISSE ── */
     .fp-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px; }
     .fp{ background:var(--surface); border:1px solid var(--border); border-radius:16px; overflow:hidden; cursor:pointer; padding:0; text-align:left; transition:box-shadow .2s ease; width:100%; }
-    .fp:hover{ box-shadow:0 18px 38px -20px rgba(41,38,33,0.4); }
-    .fp .img{ background:#fff; padding:14px; }
+    .fp:hover{ box-shadow:0 18px 38px -20px rgb(var(--ink-rgb) / 0.4); }
+    .fp .img{ display:block; background:var(--field); padding:14px; }
     .fp .img img{ width:100%; height:auto; object-fit:contain; }
-    .fp .lbl{ padding:14px 18px; border-top:1px solid rgba(41,38,33,0.08); font-weight:600; font-size:15px; }
+    .fp .lbl{ display:block; color:var(--ink); padding:14px 18px; border-top:1px solid rgb(var(--ink-rgb) / 0.08); font-weight:600; font-size:15px; }
 
     /* ── LAGE ── */
     .lage{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:clamp(28px,4vw,56px); align-items:center; }
@@ -180,7 +188,7 @@
     .addr-card{ background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:18px 20px; margin-bottom:22px; }
     .addr-card .k{ font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
     .addr-card .v{ font-family:var(--serif); font-size:20px; line-height:1.3; }
-    .map{ aspect-ratio:4/3; border-radius:18px; overflow:hidden; border:1px solid var(--border); box-shadow:0 24px 50px -26px rgba(41,38,33,0.45); }
+    .map{ aspect-ratio:4/3; border-radius:18px; overflow:hidden; border:1px solid var(--border); box-shadow:0 24px 50px -26px rgb(var(--ink-rgb) / 0.45); }
     .map iframe{ width:100%; height:100%; border:0; }
     .map-consent{ width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:24px; text-align:center; background:var(--surface-3); }
     .map-consent p{ font-size:14px; line-height:1.5; color:var(--ink-soft); max-width:30em; margin:0; }
@@ -190,21 +198,23 @@
     /* ── UMGEBUNG ── */
     .umg-grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:40px; }
     .table-card{ background:var(--surface); border:1px solid var(--border); border-radius:16px; overflow:hidden; }
-    .table-card .tt{ padding:18px 22px; border-bottom:1px solid var(--border); font-family:var(--serif); font-size:21px; }
-    .table-head{ display:flex; padding:10px 22px; font-size:11.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted-2); border-bottom:1px solid rgba(41,38,33,0.07); }
-    .table-row{ display:flex; align-items:center; padding:13px 22px; border-bottom:1px solid rgba(41,38,33,0.07); }
-    .table-row:last-child{ border-bottom:0; }
-    .table-row .name{ flex:1; min-width:0; }
-    .table-row .name a{ font-weight:600; font-size:14.5px; }
-    .table-row .name a:hover{ color:var(--accent); }
-    .table-row .name b{ font-weight:600; font-size:14.5px; }
-    .table-row .name small{ display:block; font-size:12.5px; color:var(--muted-2); }
-    .col-min{ width:52px; text-align:right; font-size:13.5px; color:var(--ink-soft); }
-    .table-head .c1{ flex:1; }
+    .dist{ width:100%; border-collapse:collapse; table-layout:fixed; font-variant-numeric:tabular-nums; }
+    .dist caption{ text-align:left; padding:18px 22px; border-bottom:1px solid var(--border); font-family:var(--serif); font-size:21px; }
+    .dist col.t{ width:62px; } .dist col.t:last-child{ width:84px; }
+    .dist th,.dist td{ padding:13px 0 13px 10px; text-align:right; vertical-align:middle; font-size:13.5px; font-weight:400; color:var(--ink-soft); border-bottom:1px solid var(--rule); }
+    .dist tr > :first-child{ padding-left:22px; text-align:left; }
+    .dist tr > :last-child{ padding-right:22px; }
+    .dist tbody tr:last-child > *{ border-bottom:0; }
+    .dist thead th{ padding-top:10px; padding-bottom:10px; font-size:11.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted-2); }
+    .dist tbody th{ color:var(--ink); font-size:14.5px; font-weight:600; hyphens:auto; -webkit-hyphens:auto; overflow-wrap:break-word; }
+    .dist tbody th a{ text-decoration:none; }
+    .dist tbody th a:hover{ color:var(--accent); text-decoration:underline; text-underline-offset:0.18em; }
+    .dist tbody th small{ display:block; font-size:12.5px; font-weight:400; color:var(--muted-2); }
+    .sr{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
     .links-title{ font-family:var(--serif); font-size:21px; margin-bottom:18px; }
     .links-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px; }
     .link-card{ display:block; background:var(--surface); border:1px solid var(--border); border-radius:13px; padding:16px 18px; transition:transform .18s ease, box-shadow .18s ease; }
-    .link-card:hover{ transform:translateY(-2px); box-shadow:0 14px 28px -16px rgba(41,38,33,0.35); }
+    .link-card:hover{ transform:translateY(-2px); box-shadow:0 14px 28px -16px rgb(var(--ink-rgb) / 0.35); }
     .link-card b{ display:block; font-weight:600; font-size:14.5px; margin-bottom:3px; }
     .link-card small{ font-size:12.5px; color:var(--muted-2); }
 
@@ -216,23 +226,26 @@
     .contact-card .nm{ font-family:var(--serif); font-size:24px; margin-bottom:4px; }
     .contact-card .loc{ font-size:14px; color:var(--muted); margin-bottom:18px; }
     .contact-card .note{ font-size:13px; color:var(--muted-2); margin-top:14px; }
-    .note-box{ background:var(--surface-3); border:1px solid rgba(58,91,126,0.14); border-radius:13px; padding:15px 18px; margin-top:10px; }
+    .note-box{ background:var(--surface-3); border:1px solid rgb(var(--accent-rgb) / 0.14); border-radius:13px; padding:15px 18px; margin-top:10px; }
     .note-box b{ display:block; font-weight:600; font-size:14px; margin-bottom:3px; color:var(--accent); }
     .note-box span{ font-size:13.5px; line-height:1.5; color:var(--ink-soft); }
-    .form-card{ background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:clamp(24px,3vw,40px); box-shadow:0 24px 50px -30px rgba(41,38,33,0.4); }
+    .form-card{ background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:clamp(24px,3vw,40px); box-shadow:0 24px 50px -30px rgb(var(--ink-rgb) / 0.4); }
     .form-title{ font-family:var(--serif); font-size:24px; margin-bottom:22px; }
     .form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
     label.fld{ display:block; }
     label.fld.wide{ margin-top:14px; }
     label.fld > span{ display:block; font-size:13px; font-weight:600; color:var(--ink-soft); margin-bottom:6px; }
-    .form-card input,.form-card select,.form-card textarea{ width:100%; padding:12px 14px; border-radius:10px; border:1px solid rgba(41,38,33,0.18); background:#fff; font:inherit; font-size:15px; }
+    .form-card input,.form-card select,.form-card textarea{ width:100%; padding:12px 14px; border-radius:10px; border:1px solid rgb(var(--ink-rgb) / 0.18); background:var(--field); font:inherit; font-size:15px; }
     .form-card textarea{ resize:vertical; }
-    .form-card input:focus,.form-card select:focus,.form-card textarea:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(58,91,126,0.14); }
-    .form-submit{ width:100%; margin-top:20px; padding:15px; border:0; border-radius:12px; background:var(--accent); color:#fff; font:inherit; font-weight:600; font-size:16px; cursor:pointer; box-shadow:0 10px 26px rgba(58,91,126,0.30); transition:background .18s ease; }
+    .form-card input:focus,.form-card select:focus,.form-card textarea:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgb(var(--accent-rgb) / 0.32); }
+    .form-submit{ width:100%; margin-top:20px; padding:15px; border:0; border-radius:12px; background:var(--accent); color:#fff; font:inherit; font-weight:600; font-size:16px; cursor:pointer; box-shadow:0 10px 26px rgb(var(--accent-rgb) / 0.30); transition:background .18s ease; }
     .form-submit:hover{ background:var(--accent-dark); }
-    .form-error{ margin:14px 0 0; padding:12px 14px; border-radius:10px; background:#f7e3e0; color:#8c2a20; font-size:14px; line-height:1.5; }
+    .form-error{ margin:14px 0 0; padding:12px 14px; border-radius:10px; background:var(--danger-bg); color:var(--danger-ink); font-size:14px; line-height:1.5; }
     .form-submit:disabled{ opacity:.7; cursor:wait; }
     .form-fine{ font-size:12.5px; color:var(--muted-2); margin:14px 0 0; }
+    .form-fine a{ color:inherit; text-decoration:underline; text-underline-offset:0.18em; }
+    .form-card form{ position:relative; }
+    .hp{ position:absolute; left:-9999px; width:1px; height:1px; }
     .thanks{ text-align:center; padding:40px 12px; }
     .thanks .check{ width:64px; height:64px; margin:0 auto 22px; border-radius:50%; background:var(--surface-3); display:grid; place-items:center; }
     .thanks .check span{ display:block; width:22px; height:11px; border-left:3px solid var(--accent); border-bottom:3px solid var(--accent); transform:rotate(-45deg); margin-top:-4px; }
@@ -240,19 +253,20 @@
     .thanks p{ font-size:15.5px; line-height:1.6; color:var(--ink-soft); max-width:30em; margin:0 auto 24px; }
 
     /* ── FOOTER ── */
-    footer{ background:#1f2730; color:rgba(255,255,255,0.78); }
+    footer{ background:var(--night); color:rgba(255,255,255,0.78); }
     footer .inner{ max-width:var(--maxw); margin:0 auto; padding:48px var(--pad); display:flex; flex-wrap:wrap; gap:24px; align-items:flex-start; justify-content:space-between; }
     footer .fbrand{ display:flex; align-items:center; gap:11px; margin-bottom:14px; }
     footer .fbrand .mark{ display:grid; place-items:center; width:34px; height:34px; border-radius:9px; background:var(--accent); color:#fff; font-family:var(--serif); font-size:18px; }
     footer .fbrand b{ color:#fff; font-weight:600; font-size:15px; }
     footer p{ font-size:14px; line-height:1.6; margin:0 0 8px; }
     footer p.fine{ font-size:12.5px; color:rgba(255,255,255,0.5); }
-    footer a.uline{ color:#fff; text-decoration:underline; }
-    footer .fcta{ display:inline-flex; align-items:center; gap:9px; padding:13px 24px; border-radius:999px; background:#fff; color:#1f2730; font-weight:600; font-size:15px; transition:background .18s ease; }
+    footer .fmain{ max-width:30em; }
+    footer a.uline{ color:#fff; text-decoration:underline; text-underline-offset:0.18em; }
+    footer .fcta{ display:inline-flex; align-items:center; gap:9px; padding:13px 24px; border-radius:999px; background:#fff; color:var(--night); font-weight:600; font-size:15px; transition:background .18s ease; }
     footer .fcta:hover{ background:rgba(255,255,255,0.88); }
 
     /* ── LIGHTBOX ── */
-    .lb{ position:fixed; inset:0; z-index:100; background:rgba(18,22,27,0.92); backdrop-filter:blur(6px); display:none; flex-direction:column; align-items:center; justify-content:center; padding:24px; animation:fadeIn .2s ease; }
+    .lb{ position:fixed; inset:0; z-index:100; background:var(--scrim); backdrop-filter:blur(6px); display:none; flex-direction:column; align-items:center; justify-content:center; padding:24px; animation:fadeIn .2s ease; }
     .lb.open{ display:flex; }
     .lb img{ max-width:min(1100px,92vw); max-height:82vh; object-fit:contain; border-radius:8px; box-shadow:0 30px 80px rgba(0,0,0,0.6); }
     .lb-close{ position:absolute; top:20px; right:24px; width:44px; height:44px; border-radius:50%; border:1px solid rgba(255,255,255,0.3); background:rgba(255,255,255,0.08); color:#fff; font-size:20px; cursor:pointer; display:grid; place-items:center; }
@@ -287,13 +301,19 @@
       .stat:nth-child(odd){ border-left:0; }
       .masonry{ columns:2 150px; }
       .lb-label{ display:none; }
+      .dist caption{ padding:16px; }
+      .dist tr > :first-child{ padding-left:16px; }
+      .dist tr > :last-child{ padding-right:16px; }
+      .dist col.t{ width:56px; } .dist col.t:last-child{ width:72px; }
     }
   </style>
 </head>
 <body>
+  <a class="skip" href="#main">Zum Inhalt springen</a>
 
   <!-- NAV -->
-  <nav class="nav">
+  <header class="site-head">
+  <nav class="nav" aria-label="Hauptnavigation">
     <a href="#hero" class="brand">
       <span class="mark">M</span>
       <span class="name"><b>Kupferhammerstraße 60</b><small>Marktredwitz</small></span>
@@ -310,15 +330,17 @@
       <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobileMenu"><span></span></button>
     </div>
   </nav>
-  <div class="mobile-menu" id="mobileMenu">
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Menü">
     <a href="#haus">Das Haus</a>
     <a href="#zimmer">Zimmer</a>
     <a href="#galerie">Galerie</a>
     <a href="#umgebung">Umgebung</a>
     <a href="#standort">Lage</a>
     <a href="#kontakt">Anfragen</a>
-  </div>
+  </nav>
+  </header>
 
+  <main id="main">
   <!-- HERO -->
   <section id="hero" class="hero">
     <div class="hero-copy">
@@ -335,7 +357,7 @@
     </div>
     <div class="hero-media">
       <figure>
-        <img src="_images/Haus/001.jpg" alt="Außenansicht des Hauses in Marktredwitz" fetchpriority="high">
+        <img src="_images/Haus/001-1280.webp" srcset="_images/Haus/001-800.webp 800w, _images/Haus/001-1280.webp 1280w, _images/Haus/001.jpg 1920w" sizes="(max-width: 880px) 100vw, min(900px, 62vw)" width="1920" height="1440" alt="Außenansicht des Hauses in Marktredwitz" fetchpriority="high">
       </figure>
       <div class="hero-card">
         <b>Kupferhammerstraße 60</b>
@@ -378,9 +400,9 @@
     <div class="inner split">
       <div>
         <div class="eyebrow">Das Objekt</div>
-        <h2 class="h" style="margin-bottom:20px;">Solides Massivhaus in ruhiger Lage</h2>
+        <h2 class="h">Solides Massivhaus in ruhiger Lage</h2>
         <p>Dieses charmante Einfamilienhaus bietet rund <strong>112 m² Wohnfläche</strong> auf einem großzügigen Grundstück von 806 m². Das 1936 erbaute Massivhaus ist gepflegt und sofort bezugsfrei.</p>
-        <p style="margin-bottom:28px;">Im Erdgeschoss liegen Wohnzimmer, Küche, zwei Zimmer und ein Bad. Im Dachgeschoss befinden sich zwei weitere Zimmer und das zweite Bad.</p>
+        <p>Im Erdgeschoss liegen Wohnzimmer, Küche, zwei Zimmer und ein Bad. Im Dachgeschoss befinden sich zwei weitere Zimmer und das zweite Bad.</p>
         <div class="specs">
           <div class="spec"><span class="pt"></span>Wohnfläche ca. 112 m²</div>
           <div class="spec"><span class="pt"></span>Grundstück 806 m²</div>
@@ -395,17 +417,17 @@
         </div>
       </div>
       <figure class="photo">
-        <img src="_images/Haus/002.jpg" alt="Haus mit Garten, Außenansicht" loading="lazy">
+        <img src="_images/Haus/002-1280.webp" srcset="_images/Haus/002-800.webp 800w, _images/Haus/002-1280.webp 1280w" sizes="(max-width: 880px) 100vw, 640px" width="1280" height="960" alt="Haus mit Garten, Außenansicht" loading="lazy" decoding="async">
       </figure>
     </div>
   </section>
 
   <!-- ZIMMER -->
   <section id="zimmer" class="pad">
-    <div class="head-block" style="max-width:40em;">
+    <div class="head-block">
       <div class="eyebrow">Mietangebot</div>
-      <h2 class="h" style="margin-bottom:16px;">Vier Zimmer ab 300 € Kaltmiete</h2>
-      <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0;">Jedes Zimmer ist einzeln mietbar, vollständig möbliert und abschließbar. Gemeinschaftsräume – Küche, Wohnzimmer und Garten – werden geteilt. Alle Verträge sind befristet.</p>
+      <h2 class="h">Vier Zimmer ab 300 € Kaltmiete</h2>
+      <p class="sub">Jedes Zimmer ist einzeln mietbar, vollständig möbliert und abschließbar. Gemeinschaftsräume – Küche, Wohnzimmer und Garten – werden geteilt. Alle Verträge sind befristet.</p>
     </div>
     <div class="room-grid" id="roomGrid"></div>
   </section>
@@ -414,11 +436,11 @@
   <section id="galerie" class="tinted">
     <div class="inner">
       <div class="gal-head">
-        <div style="max-width:34em;">
+        <div>
           <div class="eyebrow">Impressionen</div>
           <h2 class="h">Bildergalerie</h2>
         </div>
-        <p style="font-size:14.5px; color:var(--muted); max-width:24em; margin:0;">Nach Bereich filtern oder alle Fotos ansehen. Klick auf ein Bild öffnet die Vollansicht.</p>
+        <p class="gal-note">Nach Bereich filtern oder alle Fotos ansehen. Klick auf ein Bild öffnet die Vollansicht.</p>
       </div>
       <div class="filters" id="galFilters"></div>
       <div class="masonry" id="masonry"></div>
@@ -428,11 +450,11 @@
   <!-- VIDEO -->
   <section class="video-wrap">
     <div class="eyebrow">Rundgang</div>
-    <h2 class="h" style="margin-bottom:14px;">Video-Rundgang durchs Haus</h2>
-    <p style="font-size:16px; color:var(--muted); max-width:32em; margin:0 auto 34px;">Verschaffen Sie sich einen ersten Eindruck von Ihrem neuen Zuhause auf Zeit.</p>
+    <h2 class="h">Video-Rundgang durchs Haus</h2>
+    <p class="sub">Verschaffen Sie sich einen ersten Eindruck von Ihrem neuen Zuhause auf Zeit.</p>
     <div class="video-frame" id="videoFrame">
       <button class="video-play" id="videoPlay" aria-label="Video abspielen">
-        <img src="_images/video-vorschau.jpg" alt="Vorschau des Video-Rundgangs" loading="lazy">
+        <img src="_images/video-vorschau.webp" width="1280" height="720" alt="Vorschau des Video-Rundgangs" loading="lazy" decoding="async">
         <span class="play-ring"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z" fill="#fff"/></svg></span></span>
       </button>
     </div>
@@ -442,10 +464,10 @@
   <!-- GRUNDRISSE -->
   <section id="grundrisse" class="tinted">
     <div class="inner">
-      <div class="head-block" style="max-width:40em;">
+      <div class="head-block">
         <div class="eyebrow">Aufteilung</div>
-        <h2 class="h" style="margin-bottom:14px;">Grundrisse</h2>
-        <p style="font-size:16px; color:var(--muted); margin:0;">Das Haus verteilt sich auf Erdgeschoss, Dachgeschoss und Keller. Klicken Sie auf einen Grundriss, um ihn zu vergrößern.</p>
+        <h2 class="h">Grundrisse</h2>
+        <p class="sub">Das Haus verteilt sich auf Erdgeschoss, Dachgeschoss und Keller. Klicken Sie auf einen Grundriss, um ihn zu vergrößern.</p>
       </div>
       <div class="fp-grid" id="fpGrid"></div>
     </div>
@@ -456,7 +478,7 @@
     <div class="lage">
       <div>
         <div class="eyebrow">Lage</div>
-        <h2 class="h" style="margin-bottom:18px;">Ruhig &amp; gut angebunden</h2>
+        <h2 class="h">Ruhig &amp; gut angebunden</h2>
         <p>Kupferhammerstraße 60 liegt ruhig und trotzdem nah dran: Schulen, Bahnhof und Innenstadt sind in rund 7 Minuten mit dem Rad erreichbar. Ein Supermarkt liegt nur eine Minute entfernt.</p>
         <div class="addr-card">
           <div class="k">Adresse</div>
@@ -473,21 +495,27 @@
   <!-- UMGEBUNG -->
   <section id="umgebung" class="tinted">
     <div class="inner">
-      <div class="head-block" style="max-width:40em;">
+      <div class="head-block">
         <div class="eyebrow">Umgebung</div>
-        <h2 class="h" style="margin-bottom:14px;">Lage &amp; Infrastruktur</h2>
-        <p style="font-size:16px; color:var(--muted); margin:0;">Alle wichtigen Einrichtungen sind gut erreichbar – zu Fuß, mit dem Rad oder dem Auto. Alle Angaben sind ca.-Werte.</p>
+        <h2 class="h">Lage &amp; Infrastruktur</h2>
+        <p class="sub">Alle wichtigen Einrichtungen sind gut erreichbar – zu Fuß, mit dem Rad oder dem Auto. Alle Angaben sind ca.-Werte.</p>
       </div>
       <div class="umg-grid">
         <div class="table-card">
-          <div class="tt">Schulen in der Nähe</div>
-          <div class="table-head"><span class="c1">Schule</span><span class="col-min">Rad</span><span class="col-min">Auto</span><span class="col-min">Fuß</span></div>
-          <div id="schoolsTable"></div>
+          <table class="dist">
+            <caption>Schulen in der Nähe</caption>
+            <colgroup><col><col class="t"><col class="t"><col class="t"></colgroup>
+            <thead><tr><th scope="col">Schule</th><th scope="col">Rad</th><th scope="col">Auto</th><th scope="col">Fuß</th></tr></thead>
+            <tbody id="schoolsTable"></tbody>
+          </table>
         </div>
         <div class="table-card">
-          <div class="tt">Infrastruktur &amp; Nahversorgung</div>
-          <div class="table-head"><span class="c1">Ort</span><span class="col-min">Rad</span><span class="col-min">Auto</span><span class="col-min">Fuß</span></div>
-          <div id="infraTable"></div>
+          <table class="dist">
+            <caption>Infrastruktur &amp; Nahversorgung</caption>
+            <colgroup><col><col class="t"><col class="t"><col class="t"></colgroup>
+            <thead><tr><th scope="col">Ort</th><th scope="col">Rad</th><th scope="col">Auto</th><th scope="col">Fuß</th></tr></thead>
+            <tbody id="infraTable"></tbody>
+          </table>
         </div>
       </div>
       <div class="links-title">Nützliche Links für den Start</div>
@@ -500,13 +528,13 @@
     <div class="kontakt">
       <div class="intro">
         <div class="eyebrow">Kontakt</div>
-        <h2 class="h" style="margin-bottom:18px;">Interesse? Jetzt anfragen!</h2>
+        <h2 class="h">Interesse? Jetzt anfragen!</h2>
         <p>Stellen Sie Ihre unverbindliche Anfrage – wir melden uns schnellstmöglich. Alle Mietverträge sind befristet und auf Ihre geplante Mietdauer abgestimmt.</p>
         <div class="contact-card">
           <div class="k">Ihr Ansprechpartner</div>
           <div class="nm">Manfred Süß</div>
           <div class="loc">95615 Marktredwitz</div>
-          <a href="tel:+491728209350" class="cta-sm" style="font-size:16px;">0172 820 93 50</a>
+          <a href="tel:+491728209350" class="cta-sm cta-tel">0172 820 93 50</a>
           <div class="note">Erreichbar Mo–Fr, gerne auch abends nach Vereinbarung.</div>
         </div>
         <div class="note-box"><b>Befristeter Mietvertrag</b><span>Alle Verträge werden befristet abgeschlossen – passend zu Ihrer geplanten Mietdauer. Verlängerung nach Absprache möglich. Mindestmietdauer auf Anfrage.</span></div>
@@ -515,13 +543,13 @@
       </div>
 
       <div class="form-card" id="formCard">
-        <form id="anfrage-form" onsubmit="handleSubmit(event)" style="position:relative;">
+        <form id="anfrage-form" onsubmit="handleSubmit(event)">
           <div class="form-title">Anfrage senden</div>
           <div class="form-grid">
-            <label class="fld"><span>Vorname *</span><input required type="text" name="vorname"></label>
-            <label class="fld"><span>Nachname *</span><input required type="text" name="nachname"></label>
-            <label class="fld"><span>E-Mail-Adresse *</span><input required type="email" name="email"></label>
-            <label class="fld"><span>Telefon</span><input type="tel" name="telefon"></label>
+            <label class="fld"><span>Vorname *</span><input required type="text" name="vorname" autocomplete="given-name"></label>
+            <label class="fld"><span>Nachname *</span><input required type="text" name="nachname" autocomplete="family-name"></label>
+            <label class="fld"><span>E-Mail-Adresse *</span><input required type="email" name="email" autocomplete="email" inputmode="email"></label>
+            <label class="fld"><span>Telefon</span><input type="tel" name="telefon" autocomplete="tel"></label>
             <label class="fld"><span>Gewünschtes Zimmer</span>
               <select name="zimmer">
                 <option>Egal / noch offen</option>
@@ -535,19 +563,20 @@
           </div>
           <label class="fld wide"><span>Geplante Mietdauer</span><input type="text" name="dauer" placeholder="z. B. 18 Monate"></label>
           <label class="fld wide"><span>Ihre Nachricht</span><textarea rows="4" name="nachricht"></textarea></label>
-          <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;">
+          <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
           <button type="submit" class="form-submit">Anfrage jetzt absenden →</button>
           <p class="form-error" id="formStatus" role="alert" hidden></p>
-          <p class="form-fine">* Pflichtfelder. Ihre Daten werden nur zur Bearbeitung Ihrer Anfrage verwendet, siehe <a href="datenschutz.html" style="color:inherit;text-decoration:underline;">Datenschutz</a>.</p>
+          <p class="form-fine">* Pflichtfelder. Ihre Daten werden nur zur Bearbeitung Ihrer Anfrage verwendet, siehe <a href="datenschutz.html">Datenschutz</a>.</p>
         </form>
       </div>
     </div>
   </section>
+  </main>
 
   <!-- FOOTER -->
   <footer>
     <div class="inner">
-      <div style="max-width:30em;">
+      <div class="fmain">
         <div class="fbrand"><span class="mark">M</span><b>Möblierte Zimmer auf Zeit</b></div>
         <p>Kupferhammerstraße 60, 95615 Marktredwitz · Kontakt: <a href="tel:+491728209350" class="uline">0172 820 93 50</a> (Manfred Süß)</p>
         <p class="fine">Alle Mietverträge sind befristet. Irrtümer vorbehalten. · <a href="impressum.html" class="uline">Impressum</a> · <a href="datenschutz.html" class="uline">Datenschutz</a></p>
@@ -561,7 +590,7 @@
     <button class="lb-close" id="lbClose" aria-label="Schließen">✕</button>
     <div class="lb-label" id="lbLabel"></div>
     <button class="lb-nav lb-prev" id="lbPrev" aria-label="Vorheriges Bild">‹</button>
-    <img id="lbImg" src="" alt="">
+    <img id="lbImg" alt="">
     <button class="lb-nav lb-next" id="lbNext" aria-label="Nächstes Bild">›</button>
   </div>
 
@@ -607,9 +636,9 @@
     const allImages = buildGallery();
 
     const floorplans = [
-      { src:B+'grundrisse/grundriss-eg.svg', group:'Erdgeschoss mit Zimmer 1 und 2' },
-      { src:B+'grundrisse/grundriss-dg.svg', group:'Dachgeschoss mit Zimmer 3 und 4' },
-      { src:B+'grundrisse/grundriss-kg.svg', group:'Kellergeschoss' }
+      { src:B+'grundrisse/grundriss-eg.svg', group:'Erdgeschoss mit Zimmer 1 und 2', w:680, h:580 },
+      { src:B+'grundrisse/grundriss-dg.svg', group:'Dachgeschoss mit Zimmer 3 und 4', w:700, h:540 },
+      { src:B+'grundrisse/grundriss-kg.svg', group:'Kellergeschoss', w:690, h:520 }
     ];
 
     const schools = [
@@ -639,7 +668,14 @@
       { title:'Schulsuche Bayern', sub:'Alle Schulen im Überblick', url:'https://www.km.bayern.de/schulsuche' }
     ];
 
-    const TH = src => src.replace('_images/', '_images/_thumbs/');
+    // Vorschaubilder liegen als WebP unter _images/_thumbs (720 × 540, Hochformat 540 × 720).
+    const PORTRAIT = new Set(['EG/Flur/001.jpg','EG/Flur/002.jpg','EG/Flur/003.jpg','EG/KleinesZimmer/001.JPG','EG/KleinesZimmer/002.JPG',
+      'EG/KleinesZimmer/003.JPG','EG/KleinesZimmer/004.JPG','EG/KleinesZimmer/005.JPG','EG/Küche/003.jpg','EG/Küche/004.jpg','EG/Küche/005.jpg','Treppe/002.jpg']);
+    const TH = src => src.replace('_images/', '_images/_thumbs/').replace(/\.jpe?g$/i, '.webp');
+    const thumbImg = (src, alt) => {
+      const tall = PORTRAIT.has(src.replace(B, ''));
+      return '<img src="'+TH(src)+'" width="'+(tall?540:720)+'" height="'+(tall?720:540)+'" alt="'+esc(alt)+'" loading="lazy" decoding="async">';
+    };
     const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
     // ── ZIMMER ───────────────────────────────────────────────────────
@@ -650,7 +686,7 @@
       card.className = 'room';
       card.innerHTML =
         '<button class="room-cover" aria-label="Fotos von '+esc(r.title)+'">'+
-          '<img src="'+TH(imgs[0].src)+'" alt="'+esc(r.title)+'" loading="lazy" decoding="async">'+
+          thumbImg(imgs[0].src, r.title)+
           '<span class="tagimg">'+imgs.length+' Fotos</span>'+
           '<span class="tagfloor">'+esc(r.floor)+'</span>'+
           '<span class="tagfree">'+esc(r.free || 'Frei ab sofort')+'</span>'+
@@ -692,8 +728,9 @@
       masonry.innerHTML = '';
       list.forEach((im, idx) => {
         const btn = document.createElement('button');
+        btn.type = 'button';
         btn.setAttribute('aria-label', im.group+' vergrößern');
-        btn.innerHTML = '<img src="'+TH(im.src)+'" alt="'+esc(im.group)+'" loading="lazy" decoding="async">';
+        btn.innerHTML = thumbImg(im.src, im.group);
         btn.addEventListener('click', () => openLb(list, idx));
         masonry.appendChild(btn);
       });
@@ -704,30 +741,30 @@
     const fpGrid = document.getElementById('fpGrid');
     floorplans.forEach((fp, idx) => {
       const b = document.createElement('button');
+      b.type = 'button';
       b.className = 'fp';
-      b.innerHTML = '<div class="img"><img src="'+fp.src+'" alt="'+esc(fp.group)+'"></div><div class="lbl">'+esc(fp.group)+'</div>';
+      b.setAttribute('aria-label', 'Grundriss '+fp.group+' vergrößern');
+      b.innerHTML = '<span class="img"><img src="'+fp.src+'" width="'+fp.w+'" height="'+fp.h+'" alt="" loading="lazy" decoding="async"></span><span class="lbl">'+esc(fp.group)+'</span>';
       b.addEventListener('click', () => openLb(floorplans, idx));
       fpGrid.appendChild(b);
     });
 
     // ── UMGEBUNG TABELLEN + LINKS ────────────────────────────────────
     const schoolsTable = document.getElementById('schoolsTable');
+    // „–“ heißt: mit diesem Verkehrsmittel nicht sinnvoll. Vorleseprogramme bekommen das als Text.
+    const tCell = v => '<td>'+(v === '–' ? '<span aria-hidden="true">–</span><span class="sr">entfällt</span>' : esc(v))+'</td>';
     schools.forEach(row => {
-      const d = document.createElement('div');
-      d.className = 'table-row';
-      d.innerHTML =
-        '<span class="name"><a href="'+row.url+'" target="_blank" rel="noopener">'+esc(row.name)+'</a><small>'+esc(row.addr)+'</small></span>'+
-        '<span class="col-min">'+esc(row.rad)+'</span><span class="col-min">'+esc(row.auto)+'</span><span class="col-min">'+esc(row.fuss)+'</span>';
-      schoolsTable.appendChild(d);
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+        '<th scope="row"><a href="'+esc(row.url)+'" target="_blank" rel="noopener">'+esc(row.name)+'</a><small>'+esc(row.addr)+'</small></th>'+
+        tCell(row.rad)+tCell(row.auto)+tCell(row.fuss);
+      schoolsTable.appendChild(tr);
     });
     const infraTable = document.getElementById('infraTable');
     infra.forEach(row => {
-      const d = document.createElement('div');
-      d.className = 'table-row';
-      d.innerHTML =
-        '<span class="name"><b>'+esc(row.name)+'</b></span>'+
-        '<span class="col-min">'+esc(row.rad)+'</span><span class="col-min">'+esc(row.auto)+'</span><span class="col-min">'+esc(row.fuss)+'</span>';
-      infraTable.appendChild(d);
+      const tr = document.createElement('tr');
+      tr.innerHTML = '<th scope="row">'+esc(row.name)+'</th>'+tCell(row.rad)+tCell(row.auto)+tCell(row.fuss);
+      infraTable.appendChild(tr);
     });
     const linksGrid = document.getElementById('linksGrid');
     links.forEach(lk => {
@@ -792,6 +829,9 @@
     const setMenu = open => { mobileMenu.classList.toggle('open', open); navToggle.setAttribute('aria-expanded', String(open)); navToggle.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen'); };
     navToggle.addEventListener('click', () => setMenu(!mobileMenu.classList.contains('open')));
     mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+    document.addEventListener('keydown', e => {
+      if(e.key === 'Escape' && mobileMenu.classList.contains('open')){ setMenu(false); navToggle.focus(); }
+    });
 
     // ── STATISTIK (GoatCounter, ohne Cookies) ────────────────────────
     function track(path, title){
@@ -806,7 +846,7 @@
     // Anfragen gehen über Web3Forms direkt per Mail an Manfred.
     // Der Schlüssel ist öffentlich gedacht und darf im Quelltext stehen.
     const W3F_KEY = '1d3ec172-4906-4161-b827-ec798d3d082d';
-    const PHONE_HTML = '<a href="tel:+491728209350" class="cta-sm" style="font-size:16px;">0172 820 93 50</a>';
+    const PHONE_HTML = '<a href="tel:+491728209350" class="cta-sm cta-tel">0172 820 93 50</a>';
 
     function formData(f){
       return {
@@ -845,7 +885,6 @@
       if(f.botcheck && f.botcheck.checked) return;
       const d = formData(f);
       const subject = 'Zimmeranfrage – ' + d.vorname + ' ' + d.nachname;
-
 
       const btn = f.querySelector('.form-submit');
       btn.disabled = true; btn.textContent = 'Wird gesendet …'; setStatus('');
